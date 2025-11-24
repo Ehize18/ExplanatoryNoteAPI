@@ -1,0 +1,7 @@
+<Solution>
+  <Project Path="ExplanatoryNoteAPI.Application/ExplanatoryNoteAPI.Application.csproj" Id="621ff696-abbf-4e55-abb8-a7ea9041736f" />
+  <Project Path="ExplanatoryNoteAPI.Core/ExplanatoryNoteAPI.Core.csproj" />
+  <Project Path="ExplanatoryNoteAPI.Database/ExplanatoryNoteAPI.Database.csproj" />
+  <Project Path="ExplanatoryNoteAPI.Utilities/ExplanatoryNoteAPI.Utilities.csproj" Id="a5b0e998-b25a-4806-8fe9-09bd1dd4d4f6" />
+  <Project Path="ExplanatoryNoteAPI/ExplanatoryNoteAPI.csproj" />
+</Solution>

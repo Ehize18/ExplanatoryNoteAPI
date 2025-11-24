@@ -1,0 +1,15 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ExplanatoryNoteAPI.Core\ExplanatoryNoteAPI.Core.csproj" />
+    <ProjectReference Include="..\ExplanatoryNoteAPI.Database\ExplanatoryNoteAPI.Database.csproj" />
+    <ProjectReference Include="..\ExplanatoryNoteAPI.Utilities\ExplanatoryNoteAPI.Utilities.csproj" />
+  </ItemGroup>
+
+</Project>
