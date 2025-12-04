@@ -9,6 +9,6 @@ namespace ExplanatoryNoteAPI.Core.Entities
 	public class ExplanatoryNoteModifications : BaseEntity
 	{
 		[XmlElement("Modification")]
-		public List<Modification> Modification { get; set; }
+		public List<Modification>? Modification { get; set; }
 	}
 }

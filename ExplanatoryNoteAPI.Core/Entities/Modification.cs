@@ -1,4 +1,5 @@
-﻿using System.Xml.Serialization;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.Xml.Serialization;
 using ExplanatoryNoteAPI.Core.Abstractions;
 
 namespace ExplanatoryNoteAPI.Core.Entities
@@ -9,12 +10,19 @@ namespace ExplanatoryNoteAPI.Core.Entities
 	public class Modification : BaseEntity
 	{
 		[XmlElement("ModificationNumber")]
-		public int ModificationNumber { get; set; }
+		public int? ModificationNumber { get; set; }
 
 		[XmlElement("ModificationDate")]
-		public DateTime ModificationDate { get; set; }
+		public DateTime? ModificationDate { get; set; }
 
 		[XmlElement("ModificationNote")]
-		public string ModificationNote { get; set; }
+		public string? ModificationNote { get; set; }
+
+		[XmlIgnore]
+		public ExplanatoryNoteModifications? ExplanatoryNoteModifications { get; set; }
+
+		[XmlIgnore]
+		[ForeignKey(nameof(ExplanatoryNoteModifications))]
+		public Guid? ExplanatoryNoteModificationsId { get; set; }
 	}
 }

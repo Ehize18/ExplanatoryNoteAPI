@@ -34,17 +34,32 @@ namespace ExplanatoryNoteAPI.Core.Entities
 		public int Type { get; set; }
 
 
+		[XmlIgnore]
+		public NonIndustrialObject? NonIndustrialObject { get; set; }
 
 		[XmlIgnore]
 		[ForeignKey(nameof(NonIndustrialObject))]
 		public Guid? NonIndustialObjectId { get; set; }
 
 		[XmlIgnore]
+		public IndustrialObject? IndustrialObject { get; set; }
+
+		[XmlIgnore]
 		[ForeignKey(nameof(IndustrialObject))]
 		public Guid? IndustialObjectId { get; set; }
 
 		[XmlIgnore]
+		public LinearObject? LinearObject { get; set; }
+
+		[XmlIgnore]
 		[ForeignKey(nameof(LinearObject))]
 		public Guid? LinearObjectId { get; set; }
+
+		[XmlIgnore]
+		public ComplexPart? ComplexPart { get; set; }
+
+		[XmlIgnore]
+		[ForeignKey(nameof(ComplexPart))]
+		public Guid? ComplexPartId { get; set; }
 	}
 }

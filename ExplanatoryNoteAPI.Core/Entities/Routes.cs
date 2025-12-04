@@ -1,4 +1,5 @@
-﻿using System.Xml.Serialization;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.Xml.Serialization;
 using ExplanatoryNoteAPI.Core.Abstractions;
 
 namespace ExplanatoryNoteAPI.Core.Entities
@@ -9,9 +10,13 @@ namespace ExplanatoryNoteAPI.Core.Entities
 	public class Routes : BaseEntity
 	{
 		[XmlElement("RoutesNote")]
-		public TextBlock RoutesNote { get; set; }
+		public TextBlock? RoutesNote { get; set; }
+
+		[XmlIgnore]
+		[ForeignKey(nameof(RoutesNote))]
+		public Guid? RoutesNoteId { get; set; }
 
 		[XmlElement("Route")]
-		public List<Route> Route { get; set; }
+		public List<Route>? Route { get; set; }
 	}
 }

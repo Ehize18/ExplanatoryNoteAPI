@@ -1,5 +1,7 @@
-﻿using System.Xml.Serialization;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.Xml.Serialization;
 using ExplanatoryNoteAPI.Core.Abstractions;
+using ExplanatoryNoteAPI.Core.Classificators;
 
 namespace ExplanatoryNoteAPI.Core.Entities
 {
@@ -9,12 +11,27 @@ namespace ExplanatoryNoteAPI.Core.Entities
 	public class Resource : BaseEntity
 	{
 		[XmlElement("Name")]
-		public string Name { get; set; }
+		public string? Name { get; set; }
 
 		[XmlElement("Measure")]
-		public string Measure { get; set; }
+		[NotMapped]
+		public string? MeasureCode => this.Measure?.Code;
+
+		[XmlIgnore]
+		public OKEI? Measure { get; set; }
+
+		[XmlIgnore]
+		[ForeignKey(nameof(Measure))]
+		public Guid? MeasureId { get; set; }
 
 		[XmlElement("Volume")]
-		public string Volume { get; set; }
+		public string? Volume { get; set; }
+
+		[XmlIgnore]
+		public Resources? Resources { get; set; }
+
+		[XmlIgnore]
+		[ForeignKey(nameof(Resources))]
+		public Guid? ResourcesId { get; set; }
 	}
 }

@@ -1,4 +1,5 @@
-﻿using System.Xml.Serialization;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.Xml.Serialization;
 using ExplanatoryNoteAPI.Core.Abstractions;
 
 namespace ExplanatoryNoteAPI.Core.Entities
@@ -9,9 +10,13 @@ namespace ExplanatoryNoteAPI.Core.Entities
 	public class Resources : BaseEntity
 	{
 		[XmlElement("Note")]
-		public TextBlock Note { get; set; }
+		public TextBlock? Note { get; set; }
+
+		[XmlIgnore]
+		[ForeignKey(nameof(Note))]
+		public Guid? NoteId { get; set; }
 
 		[XmlElement("Resource")]
-		public List<Resource> Resource { get; set; }
+		public List<Resource>? Resource { get; set; }
 	}
 }

@@ -9,11 +9,9 @@ namespace ExplanatoryNoteAPI.Core.Entities
 	public class ObjectParts : BaseEntity
 	{
 		[XmlElement("ComplexPart")]
-		public List<ComplexPart> ComplexPart { get; set; }
+		public List<ComplexPart>? ComplexPart { get; set; }
 
 		[XmlElement("OKS")]
-		public List<OKS> OKS { get; set; }
-
-		//77
+		public List<OKS>? OKS { get; set; }
 	}
 }

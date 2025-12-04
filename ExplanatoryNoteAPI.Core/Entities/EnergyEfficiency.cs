@@ -1,5 +1,7 @@
-﻿using System.Xml.Serialization;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.Xml.Serialization;
 using ExplanatoryNoteAPI.Core.Abstractions;
+using ExplanatoryNoteAPI.Core.Classificators;
 
 namespace ExplanatoryNoteAPI.Core.Entities
 {
@@ -9,9 +11,21 @@ namespace ExplanatoryNoteAPI.Core.Entities
 	public class EnergyEfficiency : BaseEntity
 	{
 		[XmlElement("EnergyEfficiencyClass")]
-		public string EnergyEfficiencyClass { get; set; }
+		[NotMapped]
+		public string? EnergyEfficiencyClassCode => this.EnergyEfficiencyClass?.Code;
+
+		[XmlIgnore]
+		public EfficiencyClass? EnergyEfficiencyClass { get; set; }
+
+		[XmlIgnore]
+		[ForeignKey(nameof(EnergyEfficiencyClass))]
+		public Guid? EnergyEfficiencyClassId { get; set; }
 
 		[XmlElement("EnergyEfficiencyImproving")]
-		public TextBlock EnergyEfficiencyImproving { get; set; }
+		public TextBlock? EnergyEfficiencyImproving { get; set; }
+
+		[XmlIgnore]
+		[ForeignKey(nameof(EnergyEfficiencyImproving))]
+		public Guid? EnergyEfficiencyImprovingId { get; set; }
 	}
 }

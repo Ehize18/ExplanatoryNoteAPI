@@ -29,5 +29,11 @@ namespace ExplanatoryNoteAPI.Core.Entities
 		[XmlIgnore]
 		[ForeignKey(nameof(File))]
 		public Guid? FildeId { get; set; }
+
+		[XmlIgnore]
+		public ModelFile? ModelFile { get; set; }
+
+		[ForeignKey(nameof(ModelFile))]
+		public Guid? ModelFileId { get; set; }
 	}
 }
