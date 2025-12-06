@@ -20,11 +20,15 @@ namespace ExplanatoryNoteAPI.Core.Entities
 
 
 
-		[XmlIgnore]
-		public ProjectDocumentSubSection? ParentSection { get; set; }
+		//[XmlIgnore]
+		//public ProjectDocumentSubSection? ParentSection { get; set; }
 
 		[XmlIgnore]
-		[ForeignKey(nameof(ParentSection))]
+		[ForeignKey(nameof(ProjectDocumentSubSection))]
 		public Guid? ParentSectionId { get; set; }
+
+		[XmlIgnore]
+		[ForeignKey(nameof(ProjectDocumentSectionContent))]
+		public Guid? ProjectDocumentSectionContentId { get; set; }
 	}
 }

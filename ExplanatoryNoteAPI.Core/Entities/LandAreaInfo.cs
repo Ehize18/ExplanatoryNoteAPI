@@ -27,8 +27,8 @@ namespace ExplanatoryNoteAPI.Core.Entities
 		[XmlElement("UsingNote")]
 		public string? UsingNote { get; set; }
 
-		[XmlIgnore]
-		public LandInfo? LandInfo { get; set; }
+		//[XmlIgnore]
+		//public LandInfo? LandInfo { get; set; }
 
 		[XmlIgnore]
 		[ForeignKey(nameof(LandInfo))]

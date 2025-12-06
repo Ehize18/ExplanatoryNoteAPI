@@ -27,8 +27,8 @@ namespace ExplanatoryNoteAPI.Core.Entities
 		[XmlAttribute("constructionRegistry")]
 		public string? ConstructionRegistry { get; set; }
 
-		[XmlIgnore]
-		public Signers? Signers { get; set; }
+		//[XmlIgnore]
+		//public Signers? Signers { get; set; }
 
 		[XmlIgnore]
 		[ForeignKey(nameof(Signers))]

@@ -27,8 +27,8 @@ namespace ExplanatoryNoteAPI.Core.Entities
 		[XmlElement("Comment")]
 		public string? Comment { get; set; }
 
-		[XmlIgnore]
-		public TextBlock? TextBlock { get; set; }
+		//[XmlIgnore]
+		//public TextBlock? TextBlock { get; set; }
 
 		[XmlIgnore]
 		[ForeignKey(nameof(TextBlock))]

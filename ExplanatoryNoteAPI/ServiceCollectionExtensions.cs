@@ -77,6 +77,7 @@ namespace ExplanatoryNoteAPI
 		{
 			services.AddScoped<IAuthService, AuthService>();
 			services.AddScoped<IGenericDataService, GenericDataService>();
+			services.AddScoped<IExportService, ExportService>();
 
 			return services;
 		}

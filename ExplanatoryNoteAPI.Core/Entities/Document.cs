@@ -47,8 +47,8 @@ namespace ExplanatoryNoteAPI.Core.Entities
 
 
 
-		[XmlIgnore]
-		public ProjectDocumentNotNecessarySectionContent? ProjectDocumentNotNecessarySectionContent { get; set; }
+		//[XmlIgnore]
+		//public ProjectDocumentNotNecessarySectionContent? ProjectDocumentNotNecessarySectionContent { get; set; }
 
 		[XmlIgnore]
 		[ForeignKey(nameof(ProjectDocumentNotNecessarySectionContent))]

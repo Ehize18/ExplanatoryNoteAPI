@@ -27,8 +27,8 @@ namespace ExplanatoryNoteAPI.Core.Entities
 		[XmlElement("Volume")]
 		public string? Volume { get; set; }
 
-		[XmlIgnore]
-		public Resources? Resources { get; set; }
+		//[XmlIgnore]
+		//public Resources? Resources { get; set; }
 
 		[XmlIgnore]
 		[ForeignKey(nameof(Resources))]

@@ -35,22 +35,22 @@ namespace ExplanatoryNoteAPI.Core.Entities
 		[XmlAttribute("ObjectIDREFS")]
 		public string? ObjectIDREFS { get; set; }
 
-		[XmlIgnore]
-		public ProjectDocumentSectionContent? ProjectDocumentSectionContent { get; set; }
+		//[XmlIgnore]
+		//public ProjectDocumentSectionContent? ProjectDocumentSectionContent { get; set; }
 
 		[XmlIgnore]
 		[ForeignKey(nameof(ProjectDocumentSectionContent))]
 		public Guid? ProjectDocumentSectionContentId { get; set; }
 
-		[XmlIgnore]
-		public ProjectDocumentSubSection? ProjectDocumentSubSection { get; set; }
+		//[XmlIgnore]
+		//public ProjectDocumentSubSection? ProjectDocumentSubSection { get; set; }
 
 		[XmlIgnore]
 		[ForeignKey(nameof(ProjectDocumentSubSection))]
 		public Guid? ProjectDocumentSubSectionId { get; set; }
 
-		[XmlIgnore]
-		public ProjectDocumentNotNecessarySectionContent? ProjectDocumentNotNecessarySectionContent { get; set; }
+		//[XmlIgnore]
+		//public ProjectDocumentNotNecessarySectionContent? ProjectDocumentNotNecessarySectionContent { get; set; }
 
 		[XmlIgnore]
 		[ForeignKey(nameof(ProjectDocumentNotNecessarySectionContent))]

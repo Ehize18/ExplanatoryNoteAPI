@@ -51,8 +51,8 @@ namespace ExplanatoryNoteAPI.Core.Entities
 
 
 
-		[XmlIgnore]
-		public EngineeringSurveyDocuments? EngineeringSurveyDocuments { get; set; }
+		//[XmlIgnore]
+		//public EngineeringSurveyDocuments? EngineeringSurveyDocuments { get; set; }
 
 		[XmlIgnore]
 		[ForeignKey(nameof(EngineeringSurveyDocuments))]

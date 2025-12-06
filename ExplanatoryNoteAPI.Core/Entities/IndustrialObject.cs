@@ -50,7 +50,8 @@ namespace ExplanatoryNoteAPI.Core.Entities
 		public string? Name { get; set; }
 
 		[XmlElement("ConstructionType")]
-		public string? ConstructionTypeCode { get; set; }
+		[NotMapped]
+		public string? ConstructionTypeCode => this.ConstractionType?.Code;
 
 		[XmlIgnore]
 		public ConstractionType? ConstractionType { get; set; }

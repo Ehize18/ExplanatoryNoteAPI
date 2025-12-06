@@ -30,5 +30,9 @@ namespace ExplanatoryNoteAPI.Core.Entities
 		[XmlIgnore]
 		[ForeignKey(nameof(Note))]
 		public Guid? NoteId { get; set; }
+
+		[XmlIgnore]
+		[ForeignKey(nameof(StagesInfo))]
+		public Guid? StagesInfoId { get; set; }
 	}
 }

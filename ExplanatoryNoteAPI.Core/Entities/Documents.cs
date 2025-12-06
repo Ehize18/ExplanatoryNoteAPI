@@ -9,6 +9,6 @@ namespace ExplanatoryNoteAPI.Core.Entities
 	public class Documents : BaseEntity
 	{
 		[XmlElement("Document")]
-		public List<Document> Document { get; set; }
+		public List<Document>? Document { get; set; }
 	}
 }

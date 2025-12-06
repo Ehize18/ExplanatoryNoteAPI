@@ -50,7 +50,8 @@ namespace ExplanatoryNoteAPI.Core.Entities
 		public string? Name { get; set; }
 
 		[XmlElement("ConstructionType")]
-		public string? ConstructionTypeCode { get; set; }
+		[NotMapped]
+		public string? ConstructionTypeCode => this.ConstractionType?.Code;
 
 		[XmlIgnore]
 		public ConstractionType? ConstractionType { get; set; }
@@ -310,7 +311,7 @@ namespace ExplanatoryNoteAPI.Core.Entities
 		public Guid? ProjectDocumentationId { get; set; }
 
 		[XmlElement("GasProjectDocumentation")]
-		public GasLinearProjectDocumentContent GasProjectDocumentation { get; set; }
+		public GasLinearProjectDocumentContent? GasProjectDocumentation { get; set; }
 
 		[XmlIgnore]
 		[ForeignKey(nameof(GasProjectDocumentation))]

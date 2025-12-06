@@ -55,6 +55,7 @@ namespace ExplanatoryNoteAPI.Database
 			foreach (var entity in entities)
 			{
 				var type = entity.GetType();
+				var clrType = entity.ClrType;
 				var idProperty = type.GetProperty("Id");
 
 				if (idProperty is not null)
@@ -80,6 +81,25 @@ namespace ExplanatoryNoteAPI.Database
 						.HasForeignKey("UpdatedById");
 				}
 			}
+
+			modelBuilder.Entity<ExplanatoryNote>()
+				.HasOne(x => x.DesignerAssurance)
+				.WithMany()
+				.HasForeignKey(x => x.DesignerAssuranceId)
+				.IsRequired(false);
+
+			modelBuilder.Entity<ExplanatoryNote>()
+				.HasOne(x => x.UsedAbbreviations)
+				.WithMany()
+				.HasForeignKey(x => x.UsedAbbreviationsId)
+				.IsRequired(false);
+
+			modelBuilder.Entity<ExplanatoryNote>()
+				.HasMany(x => x.DesignerNote)
+				.WithOne()
+				.HasForeignKey(x => x.ExplanatoryNoteId)
+				.IsRequired(false);
+
 		}
 
 		public override DbSet<TEntity> Set<TEntity>() where TEntity : class

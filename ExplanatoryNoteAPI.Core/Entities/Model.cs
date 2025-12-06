@@ -36,8 +36,8 @@ namespace ExplanatoryNoteAPI.Core.Entities
 		[XmlAttribute("description")]
 		public string? Description { get; set; }
 
-		[XmlIgnore]
-		public Model? Model { get; set; }
+		//[XmlIgnore]
+		//public Model? Model { get; set; }
 
 		[XmlIgnore]
 		[ForeignKey(nameof(Model))]

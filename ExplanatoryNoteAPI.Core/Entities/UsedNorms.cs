@@ -19,7 +19,7 @@ namespace ExplanatoryNoteAPI.Core.Entities
 
 	public class UsedNorm : BaseEntity
 	{
-		public UsedNorms? UsedNorms { get; set; }
+		//public UsedNorms? UsedNorms { get; set; }
 
 		[ForeignKey(nameof(UsedNorms))]
 		public Guid? UsedNormsId { get; set; }

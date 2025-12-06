@@ -93,5 +93,9 @@ namespace ExplanatoryNoteAPI.Core.Entities
 		[XmlIgnore]
 		[ForeignKey(nameof(Model))]
 		public Guid? ModelId { get; set; }
+
+		[XmlIgnore]
+		[ForeignKey(nameof(ObjectParts))]
+		public Guid? ObjectPartsId { get; set; }
 	}
 }

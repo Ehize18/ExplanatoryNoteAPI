@@ -39,15 +39,15 @@ namespace ExplanatoryNoteAPI.Core.Entities
 
 
 
-		[XmlIgnore]
-		public ProjectDocumentationAuthors? ProjectDocumentationAuthors { get; set; }
+		//[XmlIgnore]
+		//public ProjectDocumentationAuthors? ProjectDocumentationAuthors { get; set; }
 
 		[XmlIgnore]
 		[ForeignKey(nameof(ProjectDocumentationAuthors))]
 		public Guid? ProjectDocumentationAuthorsId { get; set; }
 
-		[XmlIgnore]
-		public EngineeringSurveyDocument? EngineeringSurveyDocument { get; set; }
+		//[XmlIgnore]
+		//public EngineeringSurveyDocument? EngineeringSurveyDocument { get; set; }
 
 		[XmlIgnore]
 		[ForeignKey(nameof(EngineeringSurveyDocument))]

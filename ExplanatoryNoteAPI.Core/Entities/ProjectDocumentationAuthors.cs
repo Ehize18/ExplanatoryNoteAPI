@@ -9,6 +9,6 @@ namespace ExplanatoryNoteAPI.Core.Entities
 	public class ProjectDocumentationAuthors : BaseEntity
 	{
 		[XmlElement("ProjectDocumentationAuthor")]
-		public List<Author> ProjectDocumentationAuthor { get; set; }
+		public List<Author>? ProjectDocumentationAuthor { get; set; }
 	}
 }

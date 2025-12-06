@@ -9,6 +9,6 @@ namespace ExplanatoryNoteAPI.Core.Entities
 	public class PostAddress : Address
 	{
 		[XmlElement("PostIndex")]
-		public string PostIndex { get; set; }
+		public string? PostIndex { get; set; }
 	}
 }

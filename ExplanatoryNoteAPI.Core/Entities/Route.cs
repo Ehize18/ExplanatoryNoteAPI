@@ -19,8 +19,8 @@ namespace ExplanatoryNoteAPI.Core.Entities
 		[ForeignKey(nameof(Note))]
 		public Guid? NoteId { get; set; }
 
-		[XmlIgnore]
-		public Routes? Routes { get; set; }
+		//[XmlIgnore]
+		//public Routes? Routes { get; set; }
 
 		[XmlIgnore]
 		[ForeignKey(nameof(Routes))]

@@ -15,8 +15,8 @@ namespace ExplanatoryNoteAPI.Core.Entities
 		[XmlElement("DocSectionLink")]
 		public string? DocSectionLink { get; set; }
 
-		[XmlIgnore]
-		public ProjectDocumentationLinks? ProjectDocumentationLinks { get; set; }
+		//[XmlIgnore]
+		//public ProjectDocumentationLinks? ProjectDocumentationLinks { get; set; }
 
 		[XmlIgnore]
 		[ForeignKey(nameof(ProjectDocumentationLinks))]

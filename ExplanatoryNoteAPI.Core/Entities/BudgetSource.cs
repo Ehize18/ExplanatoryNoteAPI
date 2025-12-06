@@ -24,8 +24,8 @@ namespace ExplanatoryNoteAPI.Core.Entities
 		[XmlElement("SourceRatio")]
 		public decimal? SourceRatio { get; set; }
 
-		[XmlIgnore]
-		public FinanceSources? FinanceSources { get; set; }
+		//[XmlIgnore]
+		//public FinanceSources? FinanceSources { get; set; }
 
 		[XmlIgnore]
 		[ForeignKey(nameof(FinanceSources))]

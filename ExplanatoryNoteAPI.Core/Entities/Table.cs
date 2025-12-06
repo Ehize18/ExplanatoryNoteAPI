@@ -23,8 +23,8 @@ namespace ExplanatoryNoteAPI.Core.Entities
 		[ForeignKey(nameof(Row))]
 		public Guid? RowId { get; set; }
 
-		[XmlIgnore]
-		public TextBlock? TextBlock { get; set; }
+		//[XmlIgnore]
+		//public TextBlock? TextBlock { get; set; }
 
 		[XmlIgnore]
 		[ForeignKey(nameof(TextBlock))]

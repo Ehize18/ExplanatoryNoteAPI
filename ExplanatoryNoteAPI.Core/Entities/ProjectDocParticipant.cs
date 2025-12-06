@@ -35,5 +35,9 @@ namespace ExplanatoryNoteAPI.Core.Entities
 		[XmlIgnore]
 		[ForeignKey(nameof(Role))]
 		public Guid? RoleId { get; set; }
+
+		[XmlIgnore]
+		[ForeignKey(nameof(ProjectDocParticipants))]
+		public Guid? ProjectDocParticipantsId { get; set; }
 	}
 }

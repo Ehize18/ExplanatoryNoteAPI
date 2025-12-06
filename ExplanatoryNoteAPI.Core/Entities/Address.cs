@@ -47,15 +47,15 @@ namespace ExplanatoryNoteAPI.Core.Entities
 
 
 
-		[XmlIgnore]
-		public ComplexPart? ComplexPart { get; set; }
+		//[XmlIgnore]
+		//public ComplexPart? ComplexPart { get; set; }
 
 		[XmlIgnore]
 		[ForeignKey(nameof(ComplexPart))]
 		public Guid? ComplexPartId { get; set; }
 
-		[XmlIgnore]
-		public OKS? OKS { get; set; }
+		//[XmlIgnore]
+		//public OKS? OKS { get; set; }
 
 		[XmlIgnore]
 		[ForeignKey(nameof(OKS))]

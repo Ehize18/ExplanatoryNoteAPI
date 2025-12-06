@@ -12,6 +12,6 @@ namespace ExplanatoryNoteAPI.Core.Entities
 		public List<ProjectDocument>? Document { get; set; }
 
 		[XmlElement("SubSection")]
-		public List<ProjectDocumentSubSection> SubSection { get; set; }
+		public List<ProjectDocumentSubSection>? SubSection { get; set; }
 	}
 }

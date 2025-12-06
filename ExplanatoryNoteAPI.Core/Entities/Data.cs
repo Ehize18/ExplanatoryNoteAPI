@@ -15,8 +15,8 @@ namespace ExplanatoryNoteAPI.Core.Entities
 		[XmlElement("File")]
 		public List<File>? File { get; set; }
 
-		[XmlIgnore]
-		public AdditionalData? AdditionalData { get; set; }
+		//[XmlIgnore]
+		//public AdditionalData? AdditionalData { get; set; }
 
 		[XmlIgnore]
 		[ForeignKey(nameof(AdditionalData))]

@@ -1,4 +1,5 @@
-﻿using ExplanatoryNoteAPI.Core.Interfaces;
+﻿using ExplanatoryNoteAPI.Core.Entities;
+using ExplanatoryNoteAPI.Core.Interfaces;
 
 namespace ExplanatoryNoteAPI.Database.Repositories
 {
@@ -21,6 +22,10 @@ namespace ExplanatoryNoteAPI.Database.Repositories
 		public IRepository<T> CreateRepository<T>() where T : class
 		{
 			var type = typeof(T);
+			if (type == typeof(ExplanatoryNote))
+			{
+				return (IRepository<T>)new ExplanatoryNoteRepository(_context);
+			}
 			return new GenericRepository<T>(_context);
 		}
 	}

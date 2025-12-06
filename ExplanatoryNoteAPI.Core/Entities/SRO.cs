@@ -22,10 +22,10 @@ namespace ExplanatoryNoteAPI.Core.Entities
 		public Guid? SROTypeId { get; set; }
 
 		[XmlText]
-		public string Value { get; set; }
+		public string? Value { get; set; }
 
-		[XmlIgnore]
-		public SROMembership? SROMembership { get; set; }
+		//[XmlIgnore]
+		//public SROMembership? SROMembership { get; set; }
 
 		[XmlIgnore]
 		[ForeignKey(nameof(SROMembership))]

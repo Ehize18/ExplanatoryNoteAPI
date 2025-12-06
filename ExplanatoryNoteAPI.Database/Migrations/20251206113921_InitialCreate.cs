@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
@@ -326,6 +325,33 @@ namespace ExplanatoryNoteAPI.Database.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Cell",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Value = table.Column<string>(type: "text", nullable: false),
+                    AlignEnum = table.Column<int>(type: "integer", nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    CreatedById = table.Column<Guid>(type: "uuid", nullable: true),
+                    UpdatedById = table.Column<Guid>(type: "uuid", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Cell", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Cell_SysUser_CreatedById",
+                        column: x => x.CreatedById,
+                        principalTable: "SysUser",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Cell_SysUser_UpdatedById",
+                        column: x => x.UpdatedById,
+                        principalTable: "SysUser",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "ChiefProjectEngineer",
                 columns: table => new
                 {
@@ -489,6 +515,7 @@ namespace ExplanatoryNoteAPI.Database.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Description = table.Column<string>(type: "text", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     CreatedById = table.Column<Guid>(type: "uuid", nullable: true),
@@ -742,6 +769,37 @@ namespace ExplanatoryNoteAPI.Database.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Row",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    CellId = table.Column<Guid>(type: "uuid", nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    CreatedById = table.Column<Guid>(type: "uuid", nullable: true),
+                    UpdatedById = table.Column<Guid>(type: "uuid", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Row", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Row_Cell_CellId",
+                        column: x => x.CellId,
+                        principalTable: "Cell",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Row_SysUser_CreatedById",
+                        column: x => x.CreatedById,
+                        principalTable: "SysUser",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Row_SysUser_UpdatedById",
+                        column: x => x.UpdatedById,
+                        principalTable: "SysUser",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Signers",
                 columns: table => new
                 {
@@ -824,9 +882,9 @@ namespace ExplanatoryNoteAPI.Database.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    ModificationNumber = table.Column<int>(type: "integer", nullable: false),
-                    ModificationDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    ModificationNote = table.Column<string>(type: "text", nullable: false),
+                    ModificationNumber = table.Column<int>(type: "integer", nullable: true),
+                    ModificationDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    ModificationNote = table.Column<string>(type: "text", nullable: true),
                     ExplanatoryNoteModificationsId = table.Column<Guid>(type: "uuid", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
@@ -918,6 +976,42 @@ namespace ExplanatoryNoteAPI.Database.Migrations
                         principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_PrivateSource_SysUser_UpdatedById",
+                        column: x => x.UpdatedById,
+                        principalTable: "SysUser",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ModelFile",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    FileName = table.Column<string>(type: "text", nullable: true),
+                    FileFormat = table.Column<string>(type: "text", nullable: true),
+                    FileRelativePath = table.Column<string>(type: "text", nullable: true),
+                    FileChecksum = table.Column<string>(type: "text", nullable: true),
+                    Description = table.Column<string>(type: "text", nullable: true),
+                    ModelId = table.Column<Guid>(type: "uuid", nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    CreatedById = table.Column<Guid>(type: "uuid", nullable: true),
+                    UpdatedById = table.Column<Guid>(type: "uuid", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ModelFile", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ModelFile_Model_ModelId",
+                        column: x => x.ModelId,
+                        principalTable: "Model",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_ModelFile_SysUser_CreatedById",
+                        column: x => x.CreatedById,
+                        principalTable: "SysUser",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_ModelFile_SysUser_UpdatedById",
                         column: x => x.UpdatedById,
                         principalTable: "SysUser",
                         principalColumn: "Id");
@@ -1173,6 +1267,7 @@ namespace ExplanatoryNoteAPI.Database.Migrations
                     Name = table.Column<string>(type: "text", nullable: true),
                     ParentSectionId = table.Column<Guid>(type: "uuid", nullable: true),
                     ProjectDocumentSectionContentId = table.Column<Guid>(type: "uuid", nullable: true),
+                    ProjectDocumentSubSectionId = table.Column<Guid>(type: "uuid", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     CreatedById = table.Column<Guid>(type: "uuid", nullable: true),
@@ -1187,8 +1282,8 @@ namespace ExplanatoryNoteAPI.Database.Migrations
                         principalTable: "ProjectDocumentSectionContent",
                         principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_ProjectDocumentSubSection_ProjectDocumentSubSection_ParentS~",
-                        column: x => x.ParentSectionId,
+                        name: "FK_ProjectDocumentSubSection_ProjectDocumentSubSection_Project~",
+                        column: x => x.ProjectDocumentSubSectionId,
                         principalTable: "ProjectDocumentSubSection",
                         principalColumn: "Id");
                     table.ForeignKey(
@@ -1331,7 +1426,7 @@ namespace ExplanatoryNoteAPI.Database.Migrations
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     SROTypeId = table.Column<Guid>(type: "uuid", nullable: true),
-                    Value = table.Column<string>(type: "text", nullable: false),
+                    Value = table.Column<string>(type: "text", nullable: true),
                     SROMembershipId = table.Column<Guid>(type: "uuid", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
@@ -1656,7 +1751,6 @@ namespace ExplanatoryNoteAPI.Database.Migrations
                     ProjectDocumentId = table.Column<Guid>(type: "uuid", nullable: true),
                     DataId = table.Column<Guid>(type: "uuid", nullable: true),
                     Type = table.Column<int>(type: "integer", nullable: false),
-                    ModelId = table.Column<Guid>(type: "uuid", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     CreatedById = table.Column<Guid>(type: "uuid", nullable: true),
@@ -1679,11 +1773,6 @@ namespace ExplanatoryNoteAPI.Database.Migrations
                         name: "FK_File_EngineeringSurveyDocument_EngineeringSurveyDocumentId",
                         column: x => x.EngineeringSurveyDocumentId,
                         principalTable: "EngineeringSurveyDocument",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_File_Model_ModelId",
-                        column: x => x.ModelId,
-                        principalTable: "Model",
                         principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_File_ProjectDocument_ProjectDocumentId",
@@ -1888,6 +1977,8 @@ namespace ExplanatoryNoteAPI.Database.Migrations
                     FileRelativePath = table.Column<string>(type: "text", nullable: true),
                     FileChecksum = table.Column<string>(type: "text", nullable: true),
                     FildeId = table.Column<Guid>(type: "uuid", nullable: true),
+                    ModelFileId = table.Column<Guid>(type: "uuid", nullable: true),
+                    FileId = table.Column<Guid>(type: "uuid", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     CreatedById = table.Column<Guid>(type: "uuid", nullable: true),
@@ -1897,9 +1988,14 @@ namespace ExplanatoryNoteAPI.Database.Migrations
                 {
                     table.PrimaryKey("PK_SignFile", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_SignFile_File_FildeId",
-                        column: x => x.FildeId,
+                        name: "FK_SignFile_File_FileId",
+                        column: x => x.FileId,
                         principalTable: "File",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_SignFile_ModelFile_ModelFileId",
+                        column: x => x.ModelFileId,
+                        principalTable: "ModelFile",
                         principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_SignFile_SysUser_CreatedById",
@@ -1928,8 +2024,8 @@ namespace ExplanatoryNoteAPI.Database.Migrations
                     Room = table.Column<string>(type: "text", nullable: true),
                     Note = table.Column<string>(type: "text", nullable: true),
                     ComplexPartId = table.Column<Guid>(type: "uuid", nullable: true),
-                    Discriminator = table.Column<string>(type: "character varying(13)", maxLength: 13, nullable: false),
                     OKSId = table.Column<Guid>(type: "uuid", nullable: true),
+                    Discriminator = table.Column<string>(type: "character varying(13)", maxLength: 13, nullable: false),
                     PostIndex = table.Column<string>(type: "text", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
@@ -2165,12 +2261,7 @@ namespace ExplanatoryNoteAPI.Database.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    ClimateNoteId = table.Column<Guid>(type: "uuid", nullable: false),
-                    ClimateDistrict = table.Column<List<string>>(type: "text[]", nullable: false),
-                    GeologicalConditions = table.Column<List<string>>(type: "text[]", nullable: false),
-                    WindDistrict = table.Column<List<string>>(type: "text[]", nullable: false),
-                    SnowDistrict = table.Column<List<string>>(type: "text[]", nullable: false),
-                    SeismicActivity = table.Column<List<string>>(type: "text[]", nullable: false),
+                    ClimateNoteId = table.Column<Guid>(type: "uuid", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     CreatedById = table.Column<Guid>(type: "uuid", nullable: true),
@@ -2192,17 +2283,212 @@ namespace ExplanatoryNoteAPI.Database.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "ClimateConditionsClimateDistrict",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    ClimateConditionsId = table.Column<Guid>(type: "uuid", nullable: false),
+                    ClimateDistrictId = table.Column<Guid>(type: "uuid", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    CreatedById = table.Column<Guid>(type: "uuid", nullable: true),
+                    UpdatedById = table.Column<Guid>(type: "uuid", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ClimateConditionsClimateDistrict", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ClimateConditionsClimateDistrict_ClimateConditions_ClimateC~",
+                        column: x => x.ClimateConditionsId,
+                        principalTable: "ClimateConditions",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ClimateConditionsClimateDistrict_ClimateDistrict_ClimateDis~",
+                        column: x => x.ClimateDistrictId,
+                        principalTable: "ClimateDistrict",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ClimateConditionsClimateDistrict_SysUser_CreatedById",
+                        column: x => x.CreatedById,
+                        principalTable: "SysUser",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_ClimateConditionsClimateDistrict_SysUser_UpdatedById",
+                        column: x => x.UpdatedById,
+                        principalTable: "SysUser",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ClimateConditionsGeologicalConditions",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    ClimateConditionsId = table.Column<Guid>(type: "uuid", nullable: false),
+                    GeologicalConditionsId = table.Column<Guid>(type: "uuid", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    CreatedById = table.Column<Guid>(type: "uuid", nullable: true),
+                    UpdatedById = table.Column<Guid>(type: "uuid", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ClimateConditionsGeologicalConditions", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ClimateConditionsGeologicalConditions_ClimateConditions_Cli~",
+                        column: x => x.ClimateConditionsId,
+                        principalTable: "ClimateConditions",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ClimateConditionsGeologicalConditions_GeologicalConditions_~",
+                        column: x => x.GeologicalConditionsId,
+                        principalTable: "GeologicalConditions",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ClimateConditionsGeologicalConditions_SysUser_CreatedById",
+                        column: x => x.CreatedById,
+                        principalTable: "SysUser",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_ClimateConditionsGeologicalConditions_SysUser_UpdatedById",
+                        column: x => x.UpdatedById,
+                        principalTable: "SysUser",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ClimateConditionsSeismicActivity",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    ClimateConditionsId = table.Column<Guid>(type: "uuid", nullable: false),
+                    SeismicActivityId = table.Column<Guid>(type: "uuid", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    CreatedById = table.Column<Guid>(type: "uuid", nullable: true),
+                    UpdatedById = table.Column<Guid>(type: "uuid", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ClimateConditionsSeismicActivity", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ClimateConditionsSeismicActivity_ClimateConditions_ClimateC~",
+                        column: x => x.ClimateConditionsId,
+                        principalTable: "ClimateConditions",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ClimateConditionsSeismicActivity_SeismicActivity_SeismicAct~",
+                        column: x => x.SeismicActivityId,
+                        principalTable: "SeismicActivity",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ClimateConditionsSeismicActivity_SysUser_CreatedById",
+                        column: x => x.CreatedById,
+                        principalTable: "SysUser",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_ClimateConditionsSeismicActivity_SysUser_UpdatedById",
+                        column: x => x.UpdatedById,
+                        principalTable: "SysUser",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ClimateConditionsSnowDistrict",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    ClimateConditionsId = table.Column<Guid>(type: "uuid", nullable: false),
+                    SnowDistrictId = table.Column<Guid>(type: "uuid", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    CreatedById = table.Column<Guid>(type: "uuid", nullable: true),
+                    UpdatedById = table.Column<Guid>(type: "uuid", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ClimateConditionsSnowDistrict", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ClimateConditionsSnowDistrict_ClimateConditions_ClimateCond~",
+                        column: x => x.ClimateConditionsId,
+                        principalTable: "ClimateConditions",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ClimateConditionsSnowDistrict_SnowDistrict_SnowDistrictId",
+                        column: x => x.SnowDistrictId,
+                        principalTable: "SnowDistrict",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ClimateConditionsSnowDistrict_SysUser_CreatedById",
+                        column: x => x.CreatedById,
+                        principalTable: "SysUser",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_ClimateConditionsSnowDistrict_SysUser_UpdatedById",
+                        column: x => x.UpdatedById,
+                        principalTable: "SysUser",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ClimateConditionsWindDistrict",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    ClimateConditionsId = table.Column<Guid>(type: "uuid", nullable: false),
+                    WindDistrictId = table.Column<Guid>(type: "uuid", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    CreatedById = table.Column<Guid>(type: "uuid", nullable: true),
+                    UpdatedById = table.Column<Guid>(type: "uuid", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ClimateConditionsWindDistrict", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ClimateConditionsWindDistrict_ClimateConditions_ClimateCond~",
+                        column: x => x.ClimateConditionsId,
+                        principalTable: "ClimateConditions",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ClimateConditionsWindDistrict_SysUser_CreatedById",
+                        column: x => x.CreatedById,
+                        principalTable: "SysUser",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_ClimateConditionsWindDistrict_SysUser_UpdatedById",
+                        column: x => x.UpdatedById,
+                        principalTable: "SysUser",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_ClimateConditionsWindDistrict_WindDistrict_WindDistrictId",
+                        column: x => x.WindDistrictId,
+                        principalTable: "WindDistrict",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "ComplexPart",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    ObjectID = table.Column<string>(type: "text", nullable: false),
-                    Name = table.Column<string>(type: "text", nullable: false),
-                    FunctionsClass = table.Column<string>(type: "text", nullable: false),
-                    FunctionsFeaturesId = table.Column<Guid>(type: "uuid", nullable: false),
-                    DangerousIndustrialObject = table.Column<string>(type: "text", nullable: false),
-                    ObjectPartsId = table.Column<Guid>(type: "uuid", nullable: false),
-                    ModelId = table.Column<Guid>(type: "uuid", nullable: false),
+                    ObjectID = table.Column<string>(type: "text", nullable: true),
+                    Name = table.Column<string>(type: "text", nullable: true),
+                    FunctionsClass = table.Column<string>(type: "text", nullable: true),
+                    FunctionFeaturesId = table.Column<Guid>(type: "uuid", nullable: true),
+                    DangerousIndustrialObject = table.Column<string>(type: "text", nullable: true),
+                    ObjectPartsId = table.Column<Guid>(type: "uuid", nullable: true),
+                    ModelId = table.Column<Guid>(type: "uuid", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     CreatedById = table.Column<Guid>(type: "uuid", nullable: true),
@@ -2215,14 +2501,12 @@ namespace ExplanatoryNoteAPI.Database.Migrations
                         name: "FK_ComplexPart_Model_ModelId",
                         column: x => x.ModelId,
                         principalTable: "Model",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_ComplexPart_ObjectParts_ObjectPartsId",
                         column: x => x.ObjectPartsId,
                         principalTable: "ObjectParts",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_ComplexPart_SysUser_CreatedById",
                         column: x => x.CreatedById,
@@ -2290,8 +2574,8 @@ namespace ExplanatoryNoteAPI.Database.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    EnergyEfficiencyClass = table.Column<string>(type: "text", nullable: false),
-                    EnergyEfficiencyImprovingId = table.Column<Guid>(type: "uuid", nullable: false),
+                    EnergyEfficiencyClassId = table.Column<Guid>(type: "uuid", nullable: true),
+                    EnergyEfficiencyImprovingId = table.Column<Guid>(type: "uuid", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     CreatedById = table.Column<Guid>(type: "uuid", nullable: true),
@@ -2300,6 +2584,11 @@ namespace ExplanatoryNoteAPI.Database.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_EnergyEfficiency", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_EnergyEfficiency_EfficiencyClass_EnergyEfficiencyClassId",
+                        column: x => x.EnergyEfficiencyClassId,
+                        principalTable: "EfficiencyClass",
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_EnergyEfficiency_SysUser_CreatedById",
                         column: x => x.CreatedById,
@@ -2461,7 +2750,7 @@ namespace ExplanatoryNoteAPI.Database.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    Text = table.Column<string>(type: "text", nullable: true),
+                    Title = table.Column<string>(type: "text", nullable: true),
                     ExplanatoryNoteId = table.Column<Guid>(type: "uuid", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
@@ -2564,11 +2853,11 @@ namespace ExplanatoryNoteAPI.Database.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    StrengthCalculationId = table.Column<Guid>(type: "uuid", nullable: false),
-                    EnvironmentalProtectionId = table.Column<Guid>(type: "uuid", nullable: false),
-                    FireSafetyId = table.Column<Guid>(type: "uuid", nullable: false),
-                    OperationalSafetyId = table.Column<Guid>(type: "uuid", nullable: false),
-                    RepairFrequencyId = table.Column<Guid>(type: "uuid", nullable: false),
+                    StrengthCalculationId = table.Column<Guid>(type: "uuid", nullable: true),
+                    EnvironmentalProtectionId = table.Column<Guid>(type: "uuid", nullable: true),
+                    FireSafetyId = table.Column<Guid>(type: "uuid", nullable: true),
+                    OperationalSafetyId = table.Column<Guid>(type: "uuid", nullable: true),
+                    RepairFrequencyId = table.Column<Guid>(type: "uuid", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     CreatedById = table.Column<Guid>(type: "uuid", nullable: true),
@@ -2591,32 +2880,60 @@ namespace ExplanatoryNoteAPI.Database.Migrations
                         name: "FK_GasNetworksFeatures_TextBlock_EnvironmentalProtectionId",
                         column: x => x.EnvironmentalProtectionId,
                         principalTable: "TextBlock",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_GasNetworksFeatures_TextBlock_FireSafetyId",
                         column: x => x.FireSafetyId,
                         principalTable: "TextBlock",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_GasNetworksFeatures_TextBlock_OperationalSafetyId",
                         column: x => x.OperationalSafetyId,
                         principalTable: "TextBlock",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_GasNetworksFeatures_TextBlock_RepairFrequencyId",
                         column: x => x.RepairFrequencyId,
                         principalTable: "TextBlock",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_GasNetworksFeatures_TextBlock_StrengthCalculationId",
                         column: x => x.StrengthCalculationId,
                         principalTable: "TextBlock",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Image",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Type = table.Column<string>(type: "text", nullable: true),
+                    Comment = table.Column<string>(type: "text", nullable: true),
+                    TextBlockId = table.Column<Guid>(type: "uuid", nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    CreatedById = table.Column<Guid>(type: "uuid", nullable: true),
+                    UpdatedById = table.Column<Guid>(type: "uuid", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Image", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Image_SysUser_CreatedById",
+                        column: x => x.CreatedById,
+                        principalTable: "SysUser",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Image_SysUser_UpdatedById",
+                        column: x => x.UpdatedById,
+                        principalTable: "SysUser",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Image_TextBlock_TextBlockId",
+                        column: x => x.TextBlockId,
+                        principalTable: "TextBlock",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -2651,16 +2968,18 @@ namespace ExplanatoryNoteAPI.Database.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "NuclearPlantFeatures",
+                name: "MonitoringPrograms",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    ObjectListId = table.Column<Guid>(type: "uuid", nullable: false),
-                    NuclearSafetyId = table.Column<Guid>(type: "uuid", nullable: false),
-                    OperationalLimitsId = table.Column<Guid>(type: "uuid", nullable: false),
-                    NuclearPlantControlId = table.Column<Guid>(type: "uuid", nullable: false),
-                    ReactorPlantId = table.Column<Guid>(type: "uuid", nullable: false),
-                    NuclearSafitySoftwareId = table.Column<Guid>(type: "uuid", nullable: false),
+                    GeotechnicalMonitoringId = table.Column<Guid>(type: "uuid", nullable: true),
+                    HydrogeologicalMonitoringId = table.Column<Guid>(type: "uuid", nullable: true),
+                    SeismologicalMonitoringId = table.Column<Guid>(type: "uuid", nullable: true),
+                    MeteorologicalMonitoringId = table.Column<Guid>(type: "uuid", nullable: true),
+                    AerologicalMonitoringId = table.Column<Guid>(type: "uuid", nullable: true),
+                    HydrologicalMonitoringId = table.Column<Guid>(type: "uuid", nullable: true),
+                    GeodynamicalMonitoringId = table.Column<Guid>(type: "uuid", nullable: true),
+                    TechnogenicMonitoringId = table.Column<Guid>(type: "uuid", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     CreatedById = table.Column<Guid>(type: "uuid", nullable: true),
@@ -2668,53 +2987,57 @@ namespace ExplanatoryNoteAPI.Database.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_NuclearPlantFeatures", x => x.Id);
+                    table.PrimaryKey("PK_MonitoringPrograms", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_NuclearPlantFeatures_SysUser_CreatedById",
+                        name: "FK_MonitoringPrograms_SysUser_CreatedById",
                         column: x => x.CreatedById,
                         principalTable: "SysUser",
                         principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_NuclearPlantFeatures_SysUser_UpdatedById",
+                        name: "FK_MonitoringPrograms_SysUser_UpdatedById",
                         column: x => x.UpdatedById,
                         principalTable: "SysUser",
                         principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_NuclearPlantFeatures_TextBlock_NuclearPlantControlId",
-                        column: x => x.NuclearPlantControlId,
+                        name: "FK_MonitoringPrograms_TextBlock_AerologicalMonitoringId",
+                        column: x => x.AerologicalMonitoringId,
                         principalTable: "TextBlock",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_NuclearPlantFeatures_TextBlock_NuclearSafetyId",
-                        column: x => x.NuclearSafetyId,
+                        name: "FK_MonitoringPrograms_TextBlock_GeodynamicalMonitoringId",
+                        column: x => x.GeodynamicalMonitoringId,
                         principalTable: "TextBlock",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_NuclearPlantFeatures_TextBlock_NuclearSafitySoftwareId",
-                        column: x => x.NuclearSafitySoftwareId,
+                        name: "FK_MonitoringPrograms_TextBlock_GeotechnicalMonitoringId",
+                        column: x => x.GeotechnicalMonitoringId,
                         principalTable: "TextBlock",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_NuclearPlantFeatures_TextBlock_ObjectListId",
-                        column: x => x.ObjectListId,
+                        name: "FK_MonitoringPrograms_TextBlock_HydrogeologicalMonitoringId",
+                        column: x => x.HydrogeologicalMonitoringId,
                         principalTable: "TextBlock",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_NuclearPlantFeatures_TextBlock_OperationalLimitsId",
-                        column: x => x.OperationalLimitsId,
+                        name: "FK_MonitoringPrograms_TextBlock_HydrologicalMonitoringId",
+                        column: x => x.HydrologicalMonitoringId,
                         principalTable: "TextBlock",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_NuclearPlantFeatures_TextBlock_ReactorPlantId",
-                        column: x => x.ReactorPlantId,
+                        name: "FK_MonitoringPrograms_TextBlock_MeteorologicalMonitoringId",
+                        column: x => x.MeteorologicalMonitoringId,
                         principalTable: "TextBlock",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_MonitoringPrograms_TextBlock_SeismologicalMonitoringId",
+                        column: x => x.SeismologicalMonitoringId,
+                        principalTable: "TextBlock",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_MonitoringPrograms_TextBlock_TechnogenicMonitoringId",
+                        column: x => x.TechnogenicMonitoringId,
+                        principalTable: "TextBlock",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -2722,16 +3045,16 @@ namespace ExplanatoryNoteAPI.Database.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    ObjectID = table.Column<string>(type: "text", nullable: false),
-                    Name = table.Column<string>(type: "text", nullable: false),
-                    FunctionsClass = table.Column<string>(type: "text", nullable: false),
-                    FunctionsFeaturesId = table.Column<Guid>(type: "uuid", nullable: false),
-                    EnergyEfficiencyId = table.Column<Guid>(type: "uuid", nullable: false),
-                    DangerousIndustrialObject = table.Column<string>(type: "text", nullable: false),
-                    FireDangerCategory = table.Column<string>(type: "text", nullable: false),
-                    PeoplePermanentStayId = table.Column<Guid>(type: "uuid", nullable: false),
-                    ResponsibilityLevel = table.Column<string>(type: "text", nullable: false),
-                    ModelId = table.Column<Guid>(type: "uuid", nullable: false),
+                    ObjectID = table.Column<string>(type: "text", nullable: true),
+                    Name = table.Column<string>(type: "text", nullable: true),
+                    FunctionsClass = table.Column<string>(type: "text", nullable: true),
+                    FunctionsFeaturesId = table.Column<Guid>(type: "uuid", nullable: true),
+                    EnergyEfficiencyId = table.Column<Guid>(type: "uuid", nullable: true),
+                    DangerousIndustrialObjectId = table.Column<Guid>(type: "uuid", nullable: false),
+                    FireDangerCategoryId = table.Column<Guid>(type: "uuid", nullable: true),
+                    PeoplePermanentStayId = table.Column<Guid>(type: "uuid", nullable: true),
+                    ResponsibilityLevelId = table.Column<Guid>(type: "uuid", nullable: true),
+                    ModelId = table.Column<Guid>(type: "uuid", nullable: true),
                     ObjectPartsId = table.Column<Guid>(type: "uuid", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
@@ -2742,21 +3065,35 @@ namespace ExplanatoryNoteAPI.Database.Migrations
                 {
                     table.PrimaryKey("PK_OKS", x => x.Id);
                     table.ForeignKey(
+                        name: "FK_OKS_DangerIndustrialClass_DangerousIndustrialObjectId",
+                        column: x => x.DangerousIndustrialObjectId,
+                        principalTable: "DangerIndustrialClass",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
                         name: "FK_OKS_EnergyEfficiency_EnergyEfficiencyId",
                         column: x => x.EnergyEfficiencyId,
                         principalTable: "EnergyEfficiency",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_OKS_FireDangerCategory_FireDangerCategoryId",
+                        column: x => x.FireDangerCategoryId,
+                        principalTable: "FireDangerCategory",
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_OKS_Model_ModelId",
                         column: x => x.ModelId,
                         principalTable: "Model",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_OKS_ObjectParts_ObjectPartsId",
                         column: x => x.ObjectPartsId,
                         principalTable: "ObjectParts",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_OKS_ResponsibilityLevel_ResponsibilityLevelId",
+                        column: x => x.ResponsibilityLevelId,
+                        principalTable: "ResponsibilityLevel",
                         principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_OKS_SysUser_CreatedById",
@@ -2772,14 +3109,12 @@ namespace ExplanatoryNoteAPI.Database.Migrations
                         name: "FK_OKS_TextBlock_FunctionsFeaturesId",
                         column: x => x.FunctionsFeaturesId,
                         principalTable: "TextBlock",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_OKS_TextBlock_PeoplePermanentStayId",
                         column: x => x.PeoplePermanentStayId,
                         principalTable: "TextBlock",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -2787,7 +3122,7 @@ namespace ExplanatoryNoteAPI.Database.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    NoteId = table.Column<Guid>(type: "uuid", nullable: false),
+                    NoteId = table.Column<Guid>(type: "uuid", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     CreatedById = table.Column<Guid>(type: "uuid", nullable: true),
@@ -2810,8 +3145,7 @@ namespace ExplanatoryNoteAPI.Database.Migrations
                         name: "FK_Resources_TextBlock_NoteId",
                         column: x => x.NoteId,
                         principalTable: "TextBlock",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -2819,7 +3153,7 @@ namespace ExplanatoryNoteAPI.Database.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    RoutesNoteId = table.Column<Guid>(type: "uuid", nullable: false),
+                    RoutesNoteId = table.Column<Guid>(type: "uuid", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     CreatedById = table.Column<Guid>(type: "uuid", nullable: true),
@@ -2842,8 +3176,7 @@ namespace ExplanatoryNoteAPI.Database.Migrations
                         name: "FK_Routes_TextBlock_RoutesNoteId",
                         column: x => x.RoutesNoteId,
                         principalTable: "TextBlock",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -2909,6 +3242,49 @@ namespace ExplanatoryNoteAPI.Database.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Table",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    TitleRowId = table.Column<Guid>(type: "uuid", nullable: true),
+                    RowId = table.Column<Guid>(type: "uuid", nullable: true),
+                    TextBlockId = table.Column<Guid>(type: "uuid", nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    CreatedById = table.Column<Guid>(type: "uuid", nullable: true),
+                    UpdatedById = table.Column<Guid>(type: "uuid", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Table", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Table_Row_RowId",
+                        column: x => x.RowId,
+                        principalTable: "Row",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Table_Row_TitleRowId",
+                        column: x => x.TitleRowId,
+                        principalTable: "Row",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Table_SysUser_CreatedById",
+                        column: x => x.CreatedById,
+                        principalTable: "SysUser",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Table_SysUser_UpdatedById",
+                        column: x => x.UpdatedById,
+                        principalTable: "SysUser",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Table_TextBlock_TextBlockId",
+                        column: x => x.TextBlockId,
+                        principalTable: "TextBlock",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "LandAreaInfo",
                 columns: table => new
                 {
@@ -2948,13 +3324,80 @@ namespace ExplanatoryNoteAPI.Database.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "NuclearPlantFeatures",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    ObjectListId = table.Column<Guid>(type: "uuid", nullable: true),
+                    NuclearSafetyId = table.Column<Guid>(type: "uuid", nullable: true),
+                    OperationalLimitsId = table.Column<Guid>(type: "uuid", nullable: true),
+                    NuclearPlantControlId = table.Column<Guid>(type: "uuid", nullable: true),
+                    ReactorPlantId = table.Column<Guid>(type: "uuid", nullable: true),
+                    NuclearSafitySoftwareId = table.Column<Guid>(type: "uuid", nullable: true),
+                    MonitoringProgramsId = table.Column<Guid>(type: "uuid", nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    CreatedById = table.Column<Guid>(type: "uuid", nullable: true),
+                    UpdatedById = table.Column<Guid>(type: "uuid", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_NuclearPlantFeatures", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_NuclearPlantFeatures_MonitoringPrograms_MonitoringProgramsId",
+                        column: x => x.MonitoringProgramsId,
+                        principalTable: "MonitoringPrograms",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_NuclearPlantFeatures_SysUser_CreatedById",
+                        column: x => x.CreatedById,
+                        principalTable: "SysUser",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_NuclearPlantFeatures_SysUser_UpdatedById",
+                        column: x => x.UpdatedById,
+                        principalTable: "SysUser",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_NuclearPlantFeatures_TextBlock_NuclearPlantControlId",
+                        column: x => x.NuclearPlantControlId,
+                        principalTable: "TextBlock",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_NuclearPlantFeatures_TextBlock_NuclearSafetyId",
+                        column: x => x.NuclearSafetyId,
+                        principalTable: "TextBlock",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_NuclearPlantFeatures_TextBlock_NuclearSafitySoftwareId",
+                        column: x => x.NuclearSafitySoftwareId,
+                        principalTable: "TextBlock",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_NuclearPlantFeatures_TextBlock_ObjectListId",
+                        column: x => x.ObjectListId,
+                        principalTable: "TextBlock",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_NuclearPlantFeatures_TextBlock_OperationalLimitsId",
+                        column: x => x.OperationalLimitsId,
+                        principalTable: "TextBlock",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_NuclearPlantFeatures_TextBlock_ReactorPlantId",
+                        column: x => x.ReactorPlantId,
+                        principalTable: "TextBlock",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Resource",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    Name = table.Column<string>(type: "text", nullable: false),
-                    Measure = table.Column<string>(type: "text", nullable: false),
-                    Volume = table.Column<string>(type: "text", nullable: false),
+                    Name = table.Column<string>(type: "text", nullable: true),
+                    MeasureId = table.Column<Guid>(type: "uuid", nullable: true),
+                    Volume = table.Column<string>(type: "text", nullable: true),
                     ResourcesId = table.Column<Guid>(type: "uuid", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
@@ -2964,6 +3407,11 @@ namespace ExplanatoryNoteAPI.Database.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Resource", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Resource_OKEI_MeasureId",
+                        column: x => x.MeasureId,
+                        principalTable: "OKEI",
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Resource_Resources_ResourcesId",
                         column: x => x.ResourcesId,
@@ -2986,8 +3434,8 @@ namespace ExplanatoryNoteAPI.Database.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    Name = table.Column<string>(type: "text", nullable: false),
-                    NoteId = table.Column<Guid>(type: "uuid", nullable: false),
+                    Name = table.Column<string>(type: "text", nullable: true),
+                    NoteId = table.Column<Guid>(type: "uuid", nullable: true),
                     RoutesId = table.Column<Guid>(type: "uuid", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
@@ -3016,8 +3464,7 @@ namespace ExplanatoryNoteAPI.Database.Migrations
                         name: "FK_Route_TextBlock_NoteId",
                         column: x => x.NoteId,
                         principalTable: "TextBlock",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -3055,233 +3502,6 @@ namespace ExplanatoryNoteAPI.Database.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "IndustrialObject",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    ObjectID = table.Column<string>(type: "text", nullable: true),
-                    PlacementId = table.Column<Guid>(type: "uuid", nullable: true),
-                    DangerousAndComplexId = table.Column<Guid>(type: "uuid", nullable: true),
-                    UniqueId = table.Column<Guid>(type: "uuid", nullable: true),
-                    Name = table.Column<string>(type: "text", nullable: true),
-                    ConstructionTypeCode = table.Column<string>(type: "text", nullable: true),
-                    ConstractionTypeId = table.Column<Guid>(type: "uuid", nullable: true),
-                    ConstructionDuration = table.Column<decimal>(type: "numeric", nullable: true),
-                    ConstractionDatesId = table.Column<Guid>(type: "uuid", nullable: true),
-                    AddressId = table.Column<Guid>(type: "uuid", nullable: true),
-                    FunctionsId = table.Column<Guid>(type: "uuid", nullable: true),
-                    FunctionsFeaturesId = table.Column<Guid>(type: "uuid", nullable: true),
-                    EnergyEfficiencyId = table.Column<Guid>(type: "uuid", nullable: true),
-                    DangerIndustrialClassId = table.Column<Guid>(type: "uuid", nullable: true),
-                    FireDangerCategoryId = table.Column<Guid>(type: "uuid", nullable: true),
-                    PeoplePermanentStayId = table.Column<Guid>(type: "uuid", nullable: true),
-                    ResponsibilityLevelId = table.Column<Guid>(type: "uuid", nullable: true),
-                    ObjectPartsId = table.Column<Guid>(type: "uuid", nullable: true),
-                    ClimateConditionsId = table.Column<Guid>(type: "uuid", nullable: true),
-                    ResourcesId = table.Column<Guid>(type: "uuid", nullable: true),
-                    RawResourcesId = table.Column<Guid>(type: "uuid", nullable: true),
-                    ResourceUseInfoId = table.Column<Guid>(type: "uuid", nullable: true),
-                    RenewableSourceInfoId = table.Column<Guid>(type: "uuid", nullable: true),
-                    LandInfoId = table.Column<Guid>(type: "uuid", nullable: true),
-                    LandFundsId = table.Column<Guid>(type: "uuid", nullable: true),
-                    PatentsUsedId = table.Column<Guid>(type: "uuid", nullable: true),
-                    SpecialRequirementsId = table.Column<Guid>(type: "uuid", nullable: true),
-                    StaffNoteId = table.Column<Guid>(type: "uuid", nullable: true),
-                    SoftwareUsedId = table.Column<Guid>(type: "uuid", nullable: true),
-                    StagesInfoId = table.Column<Guid>(type: "uuid", nullable: true),
-                    DestroyFundsId = table.Column<Guid>(type: "uuid", nullable: true),
-                    EnergyEfficiencyLinksId = table.Column<Guid>(type: "uuid", nullable: true),
-                    UndustrialSafetyLinksId = table.Column<Guid>(type: "uuid", nullable: true),
-                    LandReclamationLinkId = table.Column<Guid>(type: "uuid", nullable: true),
-                    NuclearPlantFeaturesId = table.Column<Guid>(type: "uuid", nullable: true),
-                    ProjectDocumentationId = table.Column<Guid>(type: "uuid", nullable: true),
-                    ModelId = table.Column<Guid>(type: "uuid", nullable: true),
-                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    CreatedById = table.Column<Guid>(type: "uuid", nullable: true),
-                    UpdatedById = table.Column<Guid>(type: "uuid", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_IndustrialObject", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_IndustrialObject_Address_AddressId",
-                        column: x => x.AddressId,
-                        principalTable: "Address",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_IndustrialObject_ClimateConditions_ClimateConditionsId",
-                        column: x => x.ClimateConditionsId,
-                        principalTable: "ClimateConditions",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_IndustrialObject_ConstractionType_ConstractionTypeId",
-                        column: x => x.ConstractionTypeId,
-                        principalTable: "ConstractionType",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_IndustrialObject_ConstructionDates_ConstractionDatesId",
-                        column: x => x.ConstractionDatesId,
-                        principalTable: "ConstructionDates",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_IndustrialObject_DangerIndustrialClass_DangerIndustrialClas~",
-                        column: x => x.DangerIndustrialClassId,
-                        principalTable: "DangerIndustrialClass",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_IndustrialObject_DangerousAndComplex_DangerousAndComplexId",
-                        column: x => x.DangerousAndComplexId,
-                        principalTable: "DangerousAndComplex",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_IndustrialObject_EnergyEfficiency_EnergyEfficiencyId",
-                        column: x => x.EnergyEfficiencyId,
-                        principalTable: "EnergyEfficiency",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_IndustrialObject_FireDangerCategory_FireDangerCategoryId",
-                        column: x => x.FireDangerCategoryId,
-                        principalTable: "FireDangerCategory",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_IndustrialObject_Functions_FunctionsId",
-                        column: x => x.FunctionsId,
-                        principalTable: "Functions",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_IndustrialObject_LandInfo_LandInfoId",
-                        column: x => x.LandInfoId,
-                        principalTable: "LandInfo",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_IndustrialObject_Model_ModelId",
-                        column: x => x.ModelId,
-                        principalTable: "Model",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_IndustrialObject_NonLinearProjectDocumentContent_ProjectDoc~",
-                        column: x => x.ProjectDocumentationId,
-                        principalTable: "NonLinearProjectDocumentContent",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_IndustrialObject_NuclearPlantFeatures_NuclearPlantFeaturesId",
-                        column: x => x.NuclearPlantFeaturesId,
-                        principalTable: "NuclearPlantFeatures",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_IndustrialObject_ObjectParts_ObjectPartsId",
-                        column: x => x.ObjectPartsId,
-                        principalTable: "ObjectParts",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_IndustrialObject_Placement_PlacementId",
-                        column: x => x.PlacementId,
-                        principalTable: "Placement",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_IndustrialObject_ProjectDocumentationLinks_EnergyEfficiency~",
-                        column: x => x.EnergyEfficiencyLinksId,
-                        principalTable: "ProjectDocumentationLinks",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_IndustrialObject_ProjectDocumentationLinks_UndustrialSafety~",
-                        column: x => x.UndustrialSafetyLinksId,
-                        principalTable: "ProjectDocumentationLinks",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_IndustrialObject_Resources_RawResourcesId",
-                        column: x => x.RawResourcesId,
-                        principalTable: "Resources",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_IndustrialObject_Resources_ResourcesId",
-                        column: x => x.ResourcesId,
-                        principalTable: "Resources",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_IndustrialObject_ResponsibilityLevel_ResponsibilityLevelId",
-                        column: x => x.ResponsibilityLevelId,
-                        principalTable: "ResponsibilityLevel",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_IndustrialObject_SoftwareUsed_SoftwareUsedId",
-                        column: x => x.SoftwareUsedId,
-                        principalTable: "SoftwareUsed",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_IndustrialObject_StagesInfo_StagesInfoId",
-                        column: x => x.StagesInfoId,
-                        principalTable: "StagesInfo",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_IndustrialObject_SysUser_CreatedById",
-                        column: x => x.CreatedById,
-                        principalTable: "SysUser",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_IndustrialObject_SysUser_UpdatedById",
-                        column: x => x.UpdatedById,
-                        principalTable: "SysUser",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_IndustrialObject_TextBlock_DestroyFundsId",
-                        column: x => x.DestroyFundsId,
-                        principalTable: "TextBlock",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_IndustrialObject_TextBlock_FunctionsFeaturesId",
-                        column: x => x.FunctionsFeaturesId,
-                        principalTable: "TextBlock",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_IndustrialObject_TextBlock_LandFundsId",
-                        column: x => x.LandFundsId,
-                        principalTable: "TextBlock",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_IndustrialObject_TextBlock_LandReclamationLinkId",
-                        column: x => x.LandReclamationLinkId,
-                        principalTable: "TextBlock",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_IndustrialObject_TextBlock_PatentsUsedId",
-                        column: x => x.PatentsUsedId,
-                        principalTable: "TextBlock",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_IndustrialObject_TextBlock_PeoplePermanentStayId",
-                        column: x => x.PeoplePermanentStayId,
-                        principalTable: "TextBlock",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_IndustrialObject_TextBlock_RenewableSourceInfoId",
-                        column: x => x.RenewableSourceInfoId,
-                        principalTable: "TextBlock",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_IndustrialObject_TextBlock_ResourceUseInfoId",
-                        column: x => x.ResourceUseInfoId,
-                        principalTable: "TextBlock",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_IndustrialObject_TextBlock_SpecialRequirementsId",
-                        column: x => x.SpecialRequirementsId,
-                        principalTable: "TextBlock",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_IndustrialObject_TextBlock_StaffNoteId",
-                        column: x => x.StaffNoteId,
-                        principalTable: "TextBlock",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_IndustrialObject_Unique_UniqueId",
-                        column: x => x.UniqueId,
-                        principalTable: "Unique",
-                        principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
                 name: "LinearObject",
                 columns: table => new
                 {
@@ -3291,7 +3511,6 @@ namespace ExplanatoryNoteAPI.Database.Migrations
                     DangerousAndComplexId = table.Column<Guid>(type: "uuid", nullable: true),
                     UniqueId = table.Column<Guid>(type: "uuid", nullable: true),
                     Name = table.Column<string>(type: "text", nullable: true),
-                    ConstructionTypeCode = table.Column<string>(type: "text", nullable: true),
                     ConstractionTypeId = table.Column<Guid>(type: "uuid", nullable: true),
                     ConstructionDuration = table.Column<decimal>(type: "numeric", nullable: true),
                     ConstractionDatesId = table.Column<Guid>(type: "uuid", nullable: true),
@@ -3772,6 +3991,232 @@ namespace ExplanatoryNoteAPI.Database.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "IndustrialObject",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    ObjectID = table.Column<string>(type: "text", nullable: true),
+                    PlacementId = table.Column<Guid>(type: "uuid", nullable: true),
+                    DangerousAndComplexId = table.Column<Guid>(type: "uuid", nullable: true),
+                    UniqueId = table.Column<Guid>(type: "uuid", nullable: true),
+                    Name = table.Column<string>(type: "text", nullable: true),
+                    ConstractionTypeId = table.Column<Guid>(type: "uuid", nullable: true),
+                    ConstructionDuration = table.Column<decimal>(type: "numeric", nullable: true),
+                    ConstractionDatesId = table.Column<Guid>(type: "uuid", nullable: true),
+                    AddressId = table.Column<Guid>(type: "uuid", nullable: true),
+                    FunctionsId = table.Column<Guid>(type: "uuid", nullable: true),
+                    FunctionsFeaturesId = table.Column<Guid>(type: "uuid", nullable: true),
+                    EnergyEfficiencyId = table.Column<Guid>(type: "uuid", nullable: true),
+                    DangerIndustrialClassId = table.Column<Guid>(type: "uuid", nullable: true),
+                    FireDangerCategoryId = table.Column<Guid>(type: "uuid", nullable: true),
+                    PeoplePermanentStayId = table.Column<Guid>(type: "uuid", nullable: true),
+                    ResponsibilityLevelId = table.Column<Guid>(type: "uuid", nullable: true),
+                    ObjectPartsId = table.Column<Guid>(type: "uuid", nullable: true),
+                    ClimateConditionsId = table.Column<Guid>(type: "uuid", nullable: true),
+                    ResourcesId = table.Column<Guid>(type: "uuid", nullable: true),
+                    RawResourcesId = table.Column<Guid>(type: "uuid", nullable: true),
+                    ResourceUseInfoId = table.Column<Guid>(type: "uuid", nullable: true),
+                    RenewableSourceInfoId = table.Column<Guid>(type: "uuid", nullable: true),
+                    LandInfoId = table.Column<Guid>(type: "uuid", nullable: true),
+                    LandFundsId = table.Column<Guid>(type: "uuid", nullable: true),
+                    PatentsUsedId = table.Column<Guid>(type: "uuid", nullable: true),
+                    SpecialRequirementsId = table.Column<Guid>(type: "uuid", nullable: true),
+                    StaffNoteId = table.Column<Guid>(type: "uuid", nullable: true),
+                    SoftwareUsedId = table.Column<Guid>(type: "uuid", nullable: true),
+                    StagesInfoId = table.Column<Guid>(type: "uuid", nullable: true),
+                    DestroyFundsId = table.Column<Guid>(type: "uuid", nullable: true),
+                    EnergyEfficiencyLinksId = table.Column<Guid>(type: "uuid", nullable: true),
+                    UndustrialSafetyLinksId = table.Column<Guid>(type: "uuid", nullable: true),
+                    LandReclamationLinkId = table.Column<Guid>(type: "uuid", nullable: true),
+                    NuclearPlantFeaturesId = table.Column<Guid>(type: "uuid", nullable: true),
+                    ProjectDocumentationId = table.Column<Guid>(type: "uuid", nullable: true),
+                    ModelId = table.Column<Guid>(type: "uuid", nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    CreatedById = table.Column<Guid>(type: "uuid", nullable: true),
+                    UpdatedById = table.Column<Guid>(type: "uuid", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_IndustrialObject", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_IndustrialObject_Address_AddressId",
+                        column: x => x.AddressId,
+                        principalTable: "Address",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_IndustrialObject_ClimateConditions_ClimateConditionsId",
+                        column: x => x.ClimateConditionsId,
+                        principalTable: "ClimateConditions",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_IndustrialObject_ConstractionType_ConstractionTypeId",
+                        column: x => x.ConstractionTypeId,
+                        principalTable: "ConstractionType",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_IndustrialObject_ConstructionDates_ConstractionDatesId",
+                        column: x => x.ConstractionDatesId,
+                        principalTable: "ConstructionDates",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_IndustrialObject_DangerIndustrialClass_DangerIndustrialClas~",
+                        column: x => x.DangerIndustrialClassId,
+                        principalTable: "DangerIndustrialClass",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_IndustrialObject_DangerousAndComplex_DangerousAndComplexId",
+                        column: x => x.DangerousAndComplexId,
+                        principalTable: "DangerousAndComplex",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_IndustrialObject_EnergyEfficiency_EnergyEfficiencyId",
+                        column: x => x.EnergyEfficiencyId,
+                        principalTable: "EnergyEfficiency",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_IndustrialObject_FireDangerCategory_FireDangerCategoryId",
+                        column: x => x.FireDangerCategoryId,
+                        principalTable: "FireDangerCategory",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_IndustrialObject_Functions_FunctionsId",
+                        column: x => x.FunctionsId,
+                        principalTable: "Functions",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_IndustrialObject_LandInfo_LandInfoId",
+                        column: x => x.LandInfoId,
+                        principalTable: "LandInfo",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_IndustrialObject_Model_ModelId",
+                        column: x => x.ModelId,
+                        principalTable: "Model",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_IndustrialObject_NonLinearProjectDocumentContent_ProjectDoc~",
+                        column: x => x.ProjectDocumentationId,
+                        principalTable: "NonLinearProjectDocumentContent",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_IndustrialObject_NuclearPlantFeatures_NuclearPlantFeaturesId",
+                        column: x => x.NuclearPlantFeaturesId,
+                        principalTable: "NuclearPlantFeatures",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_IndustrialObject_ObjectParts_ObjectPartsId",
+                        column: x => x.ObjectPartsId,
+                        principalTable: "ObjectParts",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_IndustrialObject_Placement_PlacementId",
+                        column: x => x.PlacementId,
+                        principalTable: "Placement",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_IndustrialObject_ProjectDocumentationLinks_EnergyEfficiency~",
+                        column: x => x.EnergyEfficiencyLinksId,
+                        principalTable: "ProjectDocumentationLinks",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_IndustrialObject_ProjectDocumentationLinks_UndustrialSafety~",
+                        column: x => x.UndustrialSafetyLinksId,
+                        principalTable: "ProjectDocumentationLinks",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_IndustrialObject_Resources_RawResourcesId",
+                        column: x => x.RawResourcesId,
+                        principalTable: "Resources",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_IndustrialObject_Resources_ResourcesId",
+                        column: x => x.ResourcesId,
+                        principalTable: "Resources",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_IndustrialObject_ResponsibilityLevel_ResponsibilityLevelId",
+                        column: x => x.ResponsibilityLevelId,
+                        principalTable: "ResponsibilityLevel",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_IndustrialObject_SoftwareUsed_SoftwareUsedId",
+                        column: x => x.SoftwareUsedId,
+                        principalTable: "SoftwareUsed",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_IndustrialObject_StagesInfo_StagesInfoId",
+                        column: x => x.StagesInfoId,
+                        principalTable: "StagesInfo",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_IndustrialObject_SysUser_CreatedById",
+                        column: x => x.CreatedById,
+                        principalTable: "SysUser",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_IndustrialObject_SysUser_UpdatedById",
+                        column: x => x.UpdatedById,
+                        principalTable: "SysUser",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_IndustrialObject_TextBlock_DestroyFundsId",
+                        column: x => x.DestroyFundsId,
+                        principalTable: "TextBlock",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_IndustrialObject_TextBlock_FunctionsFeaturesId",
+                        column: x => x.FunctionsFeaturesId,
+                        principalTable: "TextBlock",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_IndustrialObject_TextBlock_LandFundsId",
+                        column: x => x.LandFundsId,
+                        principalTable: "TextBlock",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_IndustrialObject_TextBlock_LandReclamationLinkId",
+                        column: x => x.LandReclamationLinkId,
+                        principalTable: "TextBlock",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_IndustrialObject_TextBlock_PatentsUsedId",
+                        column: x => x.PatentsUsedId,
+                        principalTable: "TextBlock",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_IndustrialObject_TextBlock_PeoplePermanentStayId",
+                        column: x => x.PeoplePermanentStayId,
+                        principalTable: "TextBlock",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_IndustrialObject_TextBlock_RenewableSourceInfoId",
+                        column: x => x.RenewableSourceInfoId,
+                        principalTable: "TextBlock",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_IndustrialObject_TextBlock_ResourceUseInfoId",
+                        column: x => x.ResourceUseInfoId,
+                        principalTable: "TextBlock",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_IndustrialObject_TextBlock_SpecialRequirementsId",
+                        column: x => x.SpecialRequirementsId,
+                        principalTable: "TextBlock",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_IndustrialObject_TextBlock_StaffNoteId",
+                        column: x => x.StaffNoteId,
+                        principalTable: "TextBlock",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_IndustrialObject_Unique_UniqueId",
+                        column: x => x.UniqueId,
+                        principalTable: "Unique",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "LandCategoryMappings",
                 columns: table => new
                 {
@@ -3820,11 +4265,9 @@ namespace ExplanatoryNoteAPI.Database.Migrations
                     IndustialObjectId = table.Column<Guid>(type: "uuid", nullable: true),
                     LinearObjectId = table.Column<Guid>(type: "uuid", nullable: true),
                     ComplexPartId = table.Column<Guid>(type: "uuid", nullable: true),
-                    ComplexPartId1 = table.Column<Guid>(type: "uuid", nullable: true),
                     IndustrialObjectId = table.Column<Guid>(type: "uuid", nullable: true),
                     NonIndustrialObjectId = table.Column<Guid>(type: "uuid", nullable: true),
                     OKSId = table.Column<Guid>(type: "uuid", nullable: true),
-                    OKSId1 = table.Column<Guid>(type: "uuid", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     CreatedById = table.Column<Guid>(type: "uuid", nullable: true),
@@ -3836,11 +4279,6 @@ namespace ExplanatoryNoteAPI.Database.Migrations
                     table.ForeignKey(
                         name: "FK_TEI_ComplexPart_ComplexPartId",
                         column: x => x.ComplexPartId,
-                        principalTable: "ComplexPart",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_TEI_ComplexPart_ComplexPartId1",
-                        column: x => x.ComplexPartId1,
                         principalTable: "ComplexPart",
                         principalColumn: "Id");
                     table.ForeignKey(
@@ -3866,11 +4304,6 @@ namespace ExplanatoryNoteAPI.Database.Migrations
                     table.ForeignKey(
                         name: "FK_TEI_OKS_OKSId",
                         column: x => x.OKSId,
-                        principalTable: "OKS",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_TEI_OKS_OKSId1",
-                        column: x => x.OKSId1,
                         principalTable: "OKS",
                         principalColumn: "Id");
                     table.ForeignKey(
@@ -3981,6 +4414,16 @@ namespace ExplanatoryNoteAPI.Database.Migrations
                 column: "UpdatedById");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Cell_CreatedById",
+                table: "Cell",
+                column: "CreatedById");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Cell_UpdatedById",
+                table: "Cell",
+                column: "UpdatedById");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_ChiefProjectEngineer_CreatedById",
                 table: "ChiefProjectEngineer",
                 column: "CreatedById");
@@ -4006,14 +4449,114 @@ namespace ExplanatoryNoteAPI.Database.Migrations
                 column: "UpdatedById");
 
             migrationBuilder.CreateIndex(
+                name: "IX_ClimateConditionsClimateDistrict_ClimateConditionsId",
+                table: "ClimateConditionsClimateDistrict",
+                column: "ClimateConditionsId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ClimateConditionsClimateDistrict_ClimateDistrictId",
+                table: "ClimateConditionsClimateDistrict",
+                column: "ClimateDistrictId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ClimateConditionsClimateDistrict_CreatedById",
+                table: "ClimateConditionsClimateDistrict",
+                column: "CreatedById");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ClimateConditionsClimateDistrict_UpdatedById",
+                table: "ClimateConditionsClimateDistrict",
+                column: "UpdatedById");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ClimateConditionsGeologicalConditions_ClimateConditionsId",
+                table: "ClimateConditionsGeologicalConditions",
+                column: "ClimateConditionsId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ClimateConditionsGeologicalConditions_CreatedById",
+                table: "ClimateConditionsGeologicalConditions",
+                column: "CreatedById");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ClimateConditionsGeologicalConditions_GeologicalConditionsId",
+                table: "ClimateConditionsGeologicalConditions",
+                column: "GeologicalConditionsId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ClimateConditionsGeologicalConditions_UpdatedById",
+                table: "ClimateConditionsGeologicalConditions",
+                column: "UpdatedById");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ClimateConditionsSeismicActivity_ClimateConditionsId",
+                table: "ClimateConditionsSeismicActivity",
+                column: "ClimateConditionsId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ClimateConditionsSeismicActivity_CreatedById",
+                table: "ClimateConditionsSeismicActivity",
+                column: "CreatedById");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ClimateConditionsSeismicActivity_SeismicActivityId",
+                table: "ClimateConditionsSeismicActivity",
+                column: "SeismicActivityId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ClimateConditionsSeismicActivity_UpdatedById",
+                table: "ClimateConditionsSeismicActivity",
+                column: "UpdatedById");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ClimateConditionsSnowDistrict_ClimateConditionsId",
+                table: "ClimateConditionsSnowDistrict",
+                column: "ClimateConditionsId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ClimateConditionsSnowDistrict_CreatedById",
+                table: "ClimateConditionsSnowDistrict",
+                column: "CreatedById");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ClimateConditionsSnowDistrict_SnowDistrictId",
+                table: "ClimateConditionsSnowDistrict",
+                column: "SnowDistrictId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ClimateConditionsSnowDistrict_UpdatedById",
+                table: "ClimateConditionsSnowDistrict",
+                column: "UpdatedById");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ClimateConditionsWindDistrict_ClimateConditionsId",
+                table: "ClimateConditionsWindDistrict",
+                column: "ClimateConditionsId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ClimateConditionsWindDistrict_CreatedById",
+                table: "ClimateConditionsWindDistrict",
+                column: "CreatedById");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ClimateConditionsWindDistrict_UpdatedById",
+                table: "ClimateConditionsWindDistrict",
+                column: "UpdatedById");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ClimateConditionsWindDistrict_WindDistrictId",
+                table: "ClimateConditionsWindDistrict",
+                column: "WindDistrictId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_ComplexPart_CreatedById",
                 table: "ComplexPart",
                 column: "CreatedById");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ComplexPart_FunctionsFeaturesId",
+                name: "IX_ComplexPart_FunctionFeaturesId",
                 table: "ComplexPart",
-                column: "FunctionsFeaturesId");
+                column: "FunctionFeaturesId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ComplexPart_ModelId",
@@ -4129,6 +4672,11 @@ namespace ExplanatoryNoteAPI.Database.Migrations
                 name: "IX_EnergyEfficiency_CreatedById",
                 table: "EnergyEfficiency",
                 column: "CreatedById");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_EnergyEfficiency_EnergyEfficiencyClassId",
+                table: "EnergyEfficiency",
+                column: "EnergyEfficiencyClassId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_EnergyEfficiency_EnergyEfficiencyImprovingId",
@@ -4286,11 +4834,6 @@ namespace ExplanatoryNoteAPI.Database.Migrations
                 column: "EngineeringSurveyDocumentId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_File_ModelId",
-                table: "File",
-                column: "ModelId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_File_ProjectDocumentId",
                 table: "File",
                 column: "ProjectDocumentId");
@@ -4413,6 +4956,21 @@ namespace ExplanatoryNoteAPI.Database.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_GasNetworksFeatures_UpdatedById",
                 table: "GasNetworksFeatures",
+                column: "UpdatedById");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Image_CreatedById",
+                table: "Image",
+                column: "CreatedById");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Image_TextBlockId",
+                table: "Image",
+                column: "TextBlockId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Image_UpdatedById",
+                table: "Image",
                 column: "UpdatedById");
 
             migrationBuilder.CreateIndex(
@@ -4921,6 +5479,21 @@ namespace ExplanatoryNoteAPI.Database.Migrations
                 column: "UpdatedById");
 
             migrationBuilder.CreateIndex(
+                name: "IX_ModelFile_CreatedById",
+                table: "ModelFile",
+                column: "CreatedById");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ModelFile_ModelId",
+                table: "ModelFile",
+                column: "ModelId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ModelFile_UpdatedById",
+                table: "ModelFile",
+                column: "UpdatedById");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Modification_CreatedById",
                 table: "Modification",
                 column: "CreatedById");
@@ -4933,6 +5506,56 @@ namespace ExplanatoryNoteAPI.Database.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Modification_UpdatedById",
                 table: "Modification",
+                column: "UpdatedById");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_MonitoringPrograms_AerologicalMonitoringId",
+                table: "MonitoringPrograms",
+                column: "AerologicalMonitoringId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_MonitoringPrograms_CreatedById",
+                table: "MonitoringPrograms",
+                column: "CreatedById");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_MonitoringPrograms_GeodynamicalMonitoringId",
+                table: "MonitoringPrograms",
+                column: "GeodynamicalMonitoringId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_MonitoringPrograms_GeotechnicalMonitoringId",
+                table: "MonitoringPrograms",
+                column: "GeotechnicalMonitoringId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_MonitoringPrograms_HydrogeologicalMonitoringId",
+                table: "MonitoringPrograms",
+                column: "HydrogeologicalMonitoringId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_MonitoringPrograms_HydrologicalMonitoringId",
+                table: "MonitoringPrograms",
+                column: "HydrologicalMonitoringId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_MonitoringPrograms_MeteorologicalMonitoringId",
+                table: "MonitoringPrograms",
+                column: "MeteorologicalMonitoringId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_MonitoringPrograms_SeismologicalMonitoringId",
+                table: "MonitoringPrograms",
+                column: "SeismologicalMonitoringId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_MonitoringPrograms_TechnogenicMonitoringId",
+                table: "MonitoringPrograms",
+                column: "TechnogenicMonitoringId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_MonitoringPrograms_UpdatedById",
+                table: "MonitoringPrograms",
                 column: "UpdatedById");
 
             migrationBuilder.CreateIndex(
@@ -5161,6 +5784,11 @@ namespace ExplanatoryNoteAPI.Database.Migrations
                 column: "CreatedById");
 
             migrationBuilder.CreateIndex(
+                name: "IX_NuclearPlantFeatures_MonitoringProgramsId",
+                table: "NuclearPlantFeatures",
+                column: "MonitoringProgramsId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_NuclearPlantFeatures_NuclearPlantControlId",
                 table: "NuclearPlantFeatures",
                 column: "NuclearPlantControlId");
@@ -5211,9 +5839,19 @@ namespace ExplanatoryNoteAPI.Database.Migrations
                 column: "CreatedById");
 
             migrationBuilder.CreateIndex(
+                name: "IX_OKS_DangerousIndustrialObjectId",
+                table: "OKS",
+                column: "DangerousIndustrialObjectId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_OKS_EnergyEfficiencyId",
                 table: "OKS",
                 column: "EnergyEfficiencyId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_OKS_FireDangerCategoryId",
+                table: "OKS",
+                column: "FireDangerCategoryId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_OKS_FunctionsFeaturesId",
@@ -5234,6 +5872,11 @@ namespace ExplanatoryNoteAPI.Database.Migrations
                 name: "IX_OKS_PeoplePermanentStayId",
                 table: "OKS",
                 column: "PeoplePermanentStayId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_OKS_ResponsibilityLevelId",
+                table: "OKS",
+                column: "ResponsibilityLevelId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_OKS_UpdatedById",
@@ -5436,14 +6079,14 @@ namespace ExplanatoryNoteAPI.Database.Migrations
                 column: "CreatedById");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ProjectDocumentSubSection_ParentSectionId",
-                table: "ProjectDocumentSubSection",
-                column: "ParentSectionId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_ProjectDocumentSubSection_ProjectDocumentSectionContentId",
                 table: "ProjectDocumentSubSection",
                 column: "ProjectDocumentSectionContentId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ProjectDocumentSubSection_ProjectDocumentSubSectionId",
+                table: "ProjectDocumentSubSection",
+                column: "ProjectDocumentSubSectionId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ProjectDocumentSubSection_UpdatedById",
@@ -5454,6 +6097,11 @@ namespace ExplanatoryNoteAPI.Database.Migrations
                 name: "IX_Resource_CreatedById",
                 table: "Resource",
                 column: "CreatedById");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Resource_MeasureId",
+                table: "Resource",
+                column: "MeasureId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Resource_ResourcesId",
@@ -5513,6 +6161,21 @@ namespace ExplanatoryNoteAPI.Database.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Routes_UpdatedById",
                 table: "Routes",
+                column: "UpdatedById");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Row_CellId",
+                table: "Row",
+                column: "CellId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Row_CreatedById",
+                table: "Row",
+                column: "CreatedById");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Row_UpdatedById",
+                table: "Row",
                 column: "UpdatedById");
 
             migrationBuilder.CreateIndex(
@@ -5711,9 +6374,14 @@ namespace ExplanatoryNoteAPI.Database.Migrations
                 column: "CreatedById");
 
             migrationBuilder.CreateIndex(
-                name: "IX_SignFile_FildeId",
+                name: "IX_SignFile_FileId",
                 table: "SignFile",
-                column: "FildeId");
+                column: "FileId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SignFile_ModelFileId",
+                table: "SignFile",
+                column: "ModelFileId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_SignFile_UpdatedById",
@@ -5836,6 +6504,31 @@ namespace ExplanatoryNoteAPI.Database.Migrations
                 column: "UpdatedById");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Table_CreatedById",
+                table: "Table",
+                column: "CreatedById");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Table_RowId",
+                table: "Table",
+                column: "RowId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Table_TextBlockId",
+                table: "Table",
+                column: "TextBlockId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Table_TitleRowId",
+                table: "Table",
+                column: "TitleRowId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Table_UpdatedById",
+                table: "Table",
+                column: "UpdatedById");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_TechnicalCustomer_CreatedById",
                 table: "TechnicalCustomer",
                 column: "CreatedById");
@@ -5871,11 +6564,6 @@ namespace ExplanatoryNoteAPI.Database.Migrations
                 column: "ComplexPartId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_TEI_ComplexPartId1",
-                table: "TEI",
-                column: "ComplexPartId1");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_TEI_CreatedById",
                 table: "TEI",
                 column: "CreatedById");
@@ -5904,11 +6592,6 @@ namespace ExplanatoryNoteAPI.Database.Migrations
                 name: "IX_TEI_OKSId",
                 table: "TEI",
                 column: "OKSId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_TEI_OKSId1",
-                table: "TEI",
-                column: "OKSId1");
 
             migrationBuilder.CreateIndex(
                 name: "IX_TEI_UpdatedById",
@@ -5989,16 +6672,14 @@ namespace ExplanatoryNoteAPI.Database.Migrations
                 table: "ClimateConditions",
                 column: "ClimateNoteId",
                 principalTable: "TextBlock",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Cascade);
+                principalColumn: "Id");
 
             migrationBuilder.AddForeignKey(
-                name: "FK_ComplexPart_TextBlock_FunctionsFeaturesId",
+                name: "FK_ComplexPart_TextBlock_FunctionFeaturesId",
                 table: "ComplexPart",
-                column: "FunctionsFeaturesId",
+                column: "FunctionFeaturesId",
                 principalTable: "TextBlock",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Cascade);
+                principalColumn: "Id");
 
             migrationBuilder.AddForeignKey(
                 name: "FK_Developer_ExplanatoryNote_ExplanatoryNoteId",
@@ -6012,8 +6693,7 @@ namespace ExplanatoryNoteAPI.Database.Migrations
                 table: "EnergyEfficiency",
                 column: "EnergyEfficiencyImprovingId",
                 principalTable: "TextBlock",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Cascade);
+                principalColumn: "Id");
 
             migrationBuilder.AddForeignKey(
                 name: "FK_ExplanatoryNote_IndustrialObject_IndustrialObjectId",
@@ -6245,6 +6925,14 @@ namespace ExplanatoryNoteAPI.Database.Migrations
             migrationBuilder.DropForeignKey(
                 name: "FK_Model_SysUser_UpdatedById",
                 table: "Model");
+
+            migrationBuilder.DropForeignKey(
+                name: "FK_MonitoringPrograms_SysUser_CreatedById",
+                table: "MonitoringPrograms");
+
+            migrationBuilder.DropForeignKey(
+                name: "FK_MonitoringPrograms_SysUser_UpdatedById",
+                table: "MonitoringPrograms");
 
             migrationBuilder.DropForeignKey(
                 name: "FK_NonIndustrialObject_SysUser_CreatedById",
@@ -6631,6 +7319,38 @@ namespace ExplanatoryNoteAPI.Database.Migrations
                 table: "LinearObject");
 
             migrationBuilder.DropForeignKey(
+                name: "FK_MonitoringPrograms_TextBlock_AerologicalMonitoringId",
+                table: "MonitoringPrograms");
+
+            migrationBuilder.DropForeignKey(
+                name: "FK_MonitoringPrograms_TextBlock_GeodynamicalMonitoringId",
+                table: "MonitoringPrograms");
+
+            migrationBuilder.DropForeignKey(
+                name: "FK_MonitoringPrograms_TextBlock_GeotechnicalMonitoringId",
+                table: "MonitoringPrograms");
+
+            migrationBuilder.DropForeignKey(
+                name: "FK_MonitoringPrograms_TextBlock_HydrogeologicalMonitoringId",
+                table: "MonitoringPrograms");
+
+            migrationBuilder.DropForeignKey(
+                name: "FK_MonitoringPrograms_TextBlock_HydrologicalMonitoringId",
+                table: "MonitoringPrograms");
+
+            migrationBuilder.DropForeignKey(
+                name: "FK_MonitoringPrograms_TextBlock_MeteorologicalMonitoringId",
+                table: "MonitoringPrograms");
+
+            migrationBuilder.DropForeignKey(
+                name: "FK_MonitoringPrograms_TextBlock_SeismologicalMonitoringId",
+                table: "MonitoringPrograms");
+
+            migrationBuilder.DropForeignKey(
+                name: "FK_MonitoringPrograms_TextBlock_TechnogenicMonitoringId",
+                table: "MonitoringPrograms");
+
+            migrationBuilder.DropForeignKey(
                 name: "FK_NonIndustrialObject_TextBlock_DestroyFundsId",
                 table: "NonIndustrialObject");
 
@@ -6710,16 +7430,25 @@ namespace ExplanatoryNoteAPI.Database.Migrations
                 name: "BudgetSource");
 
             migrationBuilder.DropTable(
-                name: "ClimateDistrict");
+                name: "ClimateConditionsClimateDistrict");
+
+            migrationBuilder.DropTable(
+                name: "ClimateConditionsGeologicalConditions");
+
+            migrationBuilder.DropTable(
+                name: "ClimateConditionsSeismicActivity");
+
+            migrationBuilder.DropTable(
+                name: "ClimateConditionsSnowDistrict");
+
+            migrationBuilder.DropTable(
+                name: "ClimateConditionsWindDistrict");
 
             migrationBuilder.DropTable(
                 name: "Developer");
 
             migrationBuilder.DropTable(
-                name: "EfficiencyClass");
-
-            migrationBuilder.DropTable(
-                name: "GeologicalConditions");
+                name: "Image");
 
             migrationBuilder.DropTable(
                 name: "LandAreaInfo");
@@ -6749,13 +7478,7 @@ namespace ExplanatoryNoteAPI.Database.Migrations
                 name: "Route");
 
             migrationBuilder.DropTable(
-                name: "SeismicActivity");
-
-            migrationBuilder.DropTable(
                 name: "SignFile");
-
-            migrationBuilder.DropTable(
-                name: "SnowDistrict");
 
             migrationBuilder.DropTable(
                 name: "Software");
@@ -6770,19 +7493,34 @@ namespace ExplanatoryNoteAPI.Database.Migrations
                 name: "StateCustomerSource");
 
             migrationBuilder.DropTable(
+                name: "Table");
+
+            migrationBuilder.DropTable(
                 name: "TEI");
 
             migrationBuilder.DropTable(
                 name: "UsedNorm");
 
             migrationBuilder.DropTable(
-                name: "WindDistrict");
-
-            migrationBuilder.DropTable(
                 name: "WorkPerson");
 
             migrationBuilder.DropTable(
                 name: "BudgetLevel");
+
+            migrationBuilder.DropTable(
+                name: "ClimateDistrict");
+
+            migrationBuilder.DropTable(
+                name: "GeologicalConditions");
+
+            migrationBuilder.DropTable(
+                name: "SeismicActivity");
+
+            migrationBuilder.DropTable(
+                name: "SnowDistrict");
+
+            migrationBuilder.DropTable(
+                name: "WindDistrict");
 
             migrationBuilder.DropTable(
                 name: "Person");
@@ -6797,10 +7535,16 @@ namespace ExplanatoryNoteAPI.Database.Migrations
                 name: "File");
 
             migrationBuilder.DropTable(
+                name: "ModelFile");
+
+            migrationBuilder.DropTable(
                 name: "SROType");
 
             migrationBuilder.DropTable(
                 name: "TechnicalCustomer");
+
+            migrationBuilder.DropTable(
+                name: "Row");
 
             migrationBuilder.DropTable(
                 name: "OKEI");
@@ -6813,6 +7557,9 @@ namespace ExplanatoryNoteAPI.Database.Migrations
 
             migrationBuilder.DropTable(
                 name: "ProjectDocument");
+
+            migrationBuilder.DropTable(
+                name: "Cell");
 
             migrationBuilder.DropTable(
                 name: "ProjectDocParticipants");
@@ -6969,6 +7716,12 @@ namespace ExplanatoryNoteAPI.Database.Migrations
 
             migrationBuilder.DropTable(
                 name: "ChiefProjectEngineer");
+
+            migrationBuilder.DropTable(
+                name: "MonitoringPrograms");
+
+            migrationBuilder.DropTable(
+                name: "EfficiencyClass");
 
             migrationBuilder.DropTable(
                 name: "OtherDocumentsSection");

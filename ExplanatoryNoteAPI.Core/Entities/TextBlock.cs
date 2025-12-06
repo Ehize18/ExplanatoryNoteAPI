@@ -64,8 +64,8 @@ namespace ExplanatoryNoteAPI.Core.Entities
 		[XmlElement("Table")]
 		public List<Table>? Table { get; set; }
 
-		[XmlIgnore]
-		public ExplanatoryNote? ExplanatoryNote { get; set; }
+		//[XmlIgnore]
+		//public ExplanatoryNote? ExplanatoryNote { get; set; }
 
 		[XmlIgnore]
 		[ForeignKey(nameof(ExplanatoryNote))]

@@ -1,6 +1,11 @@
-﻿using System.Text.Json;
+﻿using System.Runtime.Serialization;
+using System.Text;
+using System.Text.Json;
+using System.Xml;
+using System.Xml.Serialization;
 using ExplanatoryNoteAPI.Application.Services;
 using ExplanatoryNoteAPI.Core;
+using ExplanatoryNoteAPI.Core.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Linq;
 
@@ -13,15 +18,18 @@ namespace ExplanatoryNoteAPI.Controllers
 		private readonly IGenericDataService _dataService;
 		private readonly ITypeResolver _typeResolver;
 		private readonly ILogger<EntityController> _logger;
+		private readonly IExportService _exportService;
 
 		public EntityController(
 			IGenericDataService dataService,
 			ITypeResolver typeResolver,
-			ILogger<EntityController> logger)
+			ILogger<EntityController> logger,
+			IExportService exportService)
 		{
 			_dataService = dataService;
 			_typeResolver = typeResolver;
 			_logger = logger;
+			_exportService = exportService;
 		}
 
 		/// <summary>
@@ -113,14 +121,27 @@ namespace ExplanatoryNoteAPI.Controllers
 		/// Body: { "orgFullName": "Новое название", ... }
 		/// </summary>
 		[HttpPut("{entityType}/{id}")]
-		public async Task<IActionResult> Update(string entityType, string id, [FromBody] JObject payload)
+		public async Task<IActionResult> Update(string entityType, Guid id, [FromBody] JObject payload)
 		{
 			try
 			{
 				var type = _typeResolver.ResolveType(entityType);
 				var entity = payload.ToObject(type);
 
-				var success = await _dataService.UpdateAsync(type, entity);
+				var dbEntity = await _dataService.GetByIdAsync(type, id);
+
+				var dict = payload.ToObject<Dictionary<string, object>>();
+
+				var properties = type.GetProperties();
+
+				foreach (var key in dict.Keys)
+				{
+					var prop = properties.First(x => x.Name == key);
+					var newValue = prop.GetValue(entity);
+					prop.SetValue(dbEntity, newValue);
+				}
+
+				var success = await _dataService.UpdateAsync(type, dbEntity);
 
 				if (!success)
 					return NotFound(new { message = $"Entity '{entityType}' with id '{id}' not found" });
@@ -169,6 +190,64 @@ namespace ExplanatoryNoteAPI.Controllers
 				.OrderBy(t => t.name);
 
 			return Ok(types);
+		}
+
+		[HttpGet("admin/types/{entityType}")]
+		public IActionResult GetEntityTypeStructure(string entityType)
+		{
+			try
+			{
+				var type = _typeResolver.ResolveType(entityType);
+				var entity = Activator.CreateInstance(type);
+				var properties = type.GetProperties();
+
+				var dict = new Dictionary<string, string>();
+
+				foreach(var property in properties.Where(x => x.SetMethod != null))
+				{
+					property.SetValue(entity, default);
+					dict.Add(property.Name, property.PropertyType.ToString());
+				}
+
+				return Ok(dict);
+			}
+			catch (Exception ex)
+			{
+				return BadRequest(new { message = ex.Message });
+			}
+		}
+
+		[HttpGet("fullNote/{id}")]
+		public async Task<IActionResult> GetFullNote(Guid id)
+		{
+			var fullNote = await _exportService.GetFullNote(id);
+
+			var ns = new XmlSerializerNamespaces();
+			ns.Add("", "");
+
+			var serializer = new XmlSerializer(typeof(ExplanatoryNote));
+
+			using var memoryStream = new MemoryStream();
+
+
+			var settings = new XmlWriterSettings
+			{
+				Indent = true,
+				Encoding = Encoding.UTF8,
+				OmitXmlDeclaration = false
+			};
+
+			using (var writer = XmlWriter.Create(memoryStream, settings))
+			{
+				serializer.Serialize(writer, fullNote, ns);
+			}
+
+
+			return File(
+				memoryStream.ToArray(),
+				"application/xml",
+				$"document_{id}.xml"
+			);
 		}
 
 		private object ConvertId(string id)

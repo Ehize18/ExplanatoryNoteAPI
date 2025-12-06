@@ -18,8 +18,8 @@ namespace ExplanatoryNoteAPI.Core.Entities
 		[XmlElement("UsingNote")]
 		public string? UsingNote { get; set; }
 
-		[XmlIgnore]
-		public SoftwareUsed? SoftwareUsed { get; set; }
+		//[XmlIgnore]
+		//public SoftwareUsed? SoftwareUsed { get; set; }
 
 		[XmlIgnore]
 		[ForeignKey(nameof(SoftwareUsed))]

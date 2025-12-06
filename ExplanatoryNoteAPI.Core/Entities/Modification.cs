@@ -18,8 +18,8 @@ namespace ExplanatoryNoteAPI.Core.Entities
 		[XmlElement("ModificationNote")]
 		public string? ModificationNote { get; set; }
 
-		[XmlIgnore]
-		public ExplanatoryNoteModifications? ExplanatoryNoteModifications { get; set; }
+		//[XmlIgnore]
+		//public ExplanatoryNoteModifications? ExplanatoryNoteModifications { get; set; }
 
 		[XmlIgnore]
 		[ForeignKey(nameof(ExplanatoryNoteModifications))]

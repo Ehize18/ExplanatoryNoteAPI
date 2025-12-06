@@ -6,8 +6,8 @@ namespace ExplanatoryNoteAPI.Database.Repositories
 {
 	public class GenericRepository<TEntity> : IRepository<TEntity> where TEntity : class
 	{
-		private readonly ExplanatoryNoteDbContext _context;
-		private readonly DbSet<TEntity> _dbSet;
+		protected readonly ExplanatoryNoteDbContext _context;
+		protected readonly DbSet<TEntity> _dbSet;
 
 		public GenericRepository(ExplanatoryNoteDbContext context)
 		{
