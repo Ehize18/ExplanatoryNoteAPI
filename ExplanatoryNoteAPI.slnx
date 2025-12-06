@@ -1,4 +1,7 @@
 <Solution>
+  <Project Path="docker-compose.dcproj">
+    <Build />
+  </Project>
   <Project Path="ExplanatoryNoteAPI.Application/ExplanatoryNoteAPI.Application.csproj" Id="621ff696-abbf-4e55-abb8-a7ea9041736f" />
   <Project Path="ExplanatoryNoteAPI.Core/ExplanatoryNoteAPI.Core.csproj" />
   <Project Path="ExplanatoryNoteAPI.Database/ExplanatoryNoteAPI.Database.csproj" />

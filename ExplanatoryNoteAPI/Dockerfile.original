@@ -13,10 +13,6 @@ FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY ["ExplanatoryNoteAPI/ExplanatoryNoteAPI.csproj", "ExplanatoryNoteAPI/"]
-COPY ["ExplanatoryNoteAPI.Application/ExplanatoryNoteAPI.Application.csproj", "ExplanatoryNoteAPI.Application/"]
-COPY ["ExplanatoryNoteAPI.Core/ExplanatoryNoteAPI.Core.csproj", "ExplanatoryNoteAPI.Core/"]
-COPY ["ExplanatoryNoteAPI.Database/ExplanatoryNoteAPI.Database.csproj", "ExplanatoryNoteAPI.Database/"]
-COPY ["ExplanatoryNoteAPI.Utilities/ExplanatoryNoteAPI.Utilities.csproj", "ExplanatoryNoteAPI.Utilities/"]
 RUN dotnet restore "./ExplanatoryNoteAPI/ExplanatoryNoteAPI.csproj"
 COPY . .
 WORKDIR "/src/ExplanatoryNoteAPI"
