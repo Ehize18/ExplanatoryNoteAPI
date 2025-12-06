@@ -1,0 +1,39 @@
+services:
+  db:
+    image: postgres:latest
+    restart: always
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 123
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      # Проверка: готова ли БД принимать подключения
+      test: ["CMD-SHELL", "pg_isready -U myuser -d mydatabase"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - app_network
+  
+  api:
+    image: explanatory:1
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - 8080:8080
+    networks:
+      - app_network
+    environment:
+      POSTGRES_CONNECTION_STRING: "Server=db;Port=5432;Database=ExplanatoryNote;User Id=postgres;password=123"
+      ASPNETCORE_ENVIRONMENT: "Development"
+
+volumes:
+  pgdata:
+
+networks:
+  app_network:
+    driver: bridge

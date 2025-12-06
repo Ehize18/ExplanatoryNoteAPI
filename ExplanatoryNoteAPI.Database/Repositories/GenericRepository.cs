@@ -1,10 +1,12 @@
 ﻿using System.Linq.Expressions;
+using ExplanatoryNoteAPI.Core.Abstractions;
 using ExplanatoryNoteAPI.Core.Interfaces;
+using ExplanatoryNoteAPI.Database.Extensions;
 using Microsoft.EntityFrameworkCore;
 
 namespace ExplanatoryNoteAPI.Database.Repositories
 {
-	public class GenericRepository<TEntity> : IRepository<TEntity> where TEntity : class
+	public class GenericRepository<TEntity> : IRepository<TEntity> where TEntity : class, IHasId
 	{
 		protected readonly ExplanatoryNoteDbContext _context;
 		protected readonly DbSet<TEntity> _dbSet;
@@ -15,9 +17,11 @@ namespace ExplanatoryNoteAPI.Database.Repositories
 			_dbSet = context.Set<TEntity>();
 		}
 
-		public async Task<TEntity?> GetByIdAsync(object id)
+		public async Task<TEntity?> GetByIdAsync(Guid id)
 		{
-			return await _dbSet.FindAsync(id);
+			return await _dbSet
+				.IncludeFirstLevel<TEntity>(_context)
+				.FirstOrDefaultAsync(x => x.Id == id);
 		}
 
 		public async Task<IEnumerable<TEntity>> GetAllAsync()

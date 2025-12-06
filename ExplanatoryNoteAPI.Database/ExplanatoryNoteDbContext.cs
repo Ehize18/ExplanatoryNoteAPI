@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+using ExplanatoryNoteAPI.Core.Classificators;
 using ExplanatoryNoteAPI.Core.Entities;
 using Microsoft.EntityFrameworkCore;
 

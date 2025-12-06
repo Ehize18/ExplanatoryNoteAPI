@@ -87,9 +87,10 @@ namespace ExplanatoryNoteAPI
 			services.AddCors(
 				o => o.AddPolicy("DevPolicy",
 					builder => builder
-						.AllowAnyOrigin()
+						.SetIsOriginAllowed(x => true)
 						.AllowAnyHeader()
-						.AllowAnyMethod()));
+						.AllowAnyMethod()
+						.AllowCredentials()));
 			return services;
 		}
 	}

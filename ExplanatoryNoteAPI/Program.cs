@@ -1,4 +1,8 @@
 
+using ExplanatoryNoteAPI.Database;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.EntityFrameworkCore;
+
 namespace ExplanatoryNoteAPI
 {
     public class Program
@@ -33,6 +37,7 @@ namespace ExplanatoryNoteAPI
                 app.MapOpenApi();
                 app.UseSwagger();
                 app.UseSwaggerUI();
+                app.UseCors("DevPolicy");
             }
 
             //app.UseHttpsRedirection();
@@ -42,7 +47,12 @@ namespace ExplanatoryNoteAPI
 
             app.MapControllers();
 
-            app.Run();
+			using var scope = app.Services.CreateScope();
+
+			var context = scope.ServiceProvider.GetRequiredService<ExplanatoryNoteDbContext>();
+			context.Database.Migrate();
+
+			app.Run();
         }
     }
 }

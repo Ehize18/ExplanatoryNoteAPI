@@ -2,7 +2,7 @@
 
 namespace ExplanatoryNoteAPI.Core.Abstractions
 {
-	public abstract class BaseClassificator
+	public abstract class BaseClassificator : IHasId
 	{
 		[Key]
 		public Guid Id { get; set; }

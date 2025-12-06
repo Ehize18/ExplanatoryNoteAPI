@@ -8,7 +8,7 @@ namespace ExplanatoryNoteAPI.Core.Abstractions
 	/// <summary>
 	/// Базовая сушность
 	/// </summary>
-	public abstract class BaseEntity
+	public abstract class BaseEntity : IHasId
 	{
 		[XmlIgnore]
 		[Key]
@@ -33,5 +33,10 @@ namespace ExplanatoryNoteAPI.Core.Abstractions
 		[XmlIgnore]
 		[ForeignKey(nameof(UpdatedBy))]
 		public Guid? UpdatedById { get; set; }
+	}
+
+	public interface IHasId
+	{
+		public Guid Id { get; set; }
 	}
 }

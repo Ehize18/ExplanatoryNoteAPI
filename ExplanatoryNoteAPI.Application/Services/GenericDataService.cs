@@ -1,4 +1,5 @@
 ﻿using ExplanatoryNoteAPI.Core;
+using ExplanatoryNoteAPI.Core.Abstractions;
 using ExplanatoryNoteAPI.Core.Interfaces;
 
 namespace ExplanatoryNoteAPI.Application.Services
@@ -30,7 +31,7 @@ namespace ExplanatoryNoteAPI.Application.Services
 
 			var method = typeof(IRepository<>)
 				.MakeGenericType(entityType)
-				.GetMethod(nameof(IRepository<object>.GetByIdAsync));
+				.GetMethod(nameof(IRepository<IHasId>.GetByIdAsync));
 
 			var repository = _unitOfWork.Repository(entityType);
 			var task = (Task)method.Invoke(repository, new[] { id });
@@ -46,7 +47,7 @@ namespace ExplanatoryNoteAPI.Application.Services
 
 			var method = typeof(IRepository<>)
 				.MakeGenericType(entityType)
-				.GetMethod(nameof(IRepository<object>.GetAllAsync));
+				.GetMethod(nameof(IRepository<IHasId>.GetAllAsync));
 
 			var repository = _unitOfWork.Repository(entityType);
 			var task = (Task)method.Invoke(repository, Array.Empty<object>());
@@ -76,7 +77,7 @@ namespace ExplanatoryNoteAPI.Application.Services
 			}
 			var method = typeof(IRepository<>)
 				.MakeGenericType(entityType)
-				.GetMethod(nameof(IRepository<object>.AddAsync));
+				.GetMethod(nameof(IRepository<IHasId>.AddAsync));
 
 			var repository = _unitOfWork.Repository(entityType);
 			var task = (Task)method.Invoke(repository, new[] { entity });
@@ -97,7 +98,7 @@ namespace ExplanatoryNoteAPI.Application.Services
 			}
 			var method = typeof(IRepository<>)
 				.MakeGenericType(entityType)
-				.GetMethod(nameof(IRepository<object>.UpdateAsync));
+				.GetMethod(nameof(IRepository<IHasId>.UpdateAsync));
 
 			var repository = _unitOfWork.Repository(entityType);
 			var task = (Task)method.Invoke(repository, new[] { entity });
@@ -119,7 +120,7 @@ namespace ExplanatoryNoteAPI.Application.Services
 			}
 			var method = typeof(IRepository<>)
 				.MakeGenericType(entityType)
-				.GetMethod(nameof(IRepository<object>.DeleteAsync));
+				.GetMethod(nameof(IRepository<IHasId>.DeleteAsync));
 
 			var repository = _unitOfWork.Repository(entityType);
 			var task = (Task)method.Invoke(repository, new[] { entity });

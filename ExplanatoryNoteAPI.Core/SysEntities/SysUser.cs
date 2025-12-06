@@ -1,11 +1,12 @@
 ﻿using System.Xml.Serialization;
+using ExplanatoryNoteAPI.Core.Abstractions;
 
 namespace ExplanatoryNoteAPI.Core.Entities
 {
 	/// <summary>
 	/// Пользователь
 	/// </summary>
-	public class SysUser
+	public class SysUser : IHasId
 	{
 		[XmlIgnore]
 		public Guid Id { get; set; }

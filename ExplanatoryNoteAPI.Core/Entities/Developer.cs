@@ -36,5 +36,11 @@ namespace ExplanatoryNoteAPI.Core.Entities
 		[XmlIgnore]
 		[ForeignKey(nameof(Person))]
 		public Guid? PersonId { get; set; }
+
+
+
+		[XmlIgnore]
+		[ForeignKey(nameof(ExplanatoryNote))]
+		public Guid? ExplanatoryNoteId { get; set; }
 	}
 }

@@ -1,4 +1,5 @@
 ﻿using ExplanatoryNoteAPI.Core;
+using ExplanatoryNoteAPI.Core.Abstractions;
 using ExplanatoryNoteAPI.Core.Interfaces;
 using ExplanatoryNoteAPI.Database;
 using ExplanatoryNoteAPI.Database.Repositories;
@@ -7,7 +8,7 @@ namespace ExplanatoryNoteAPI.Application.Services
 {
 	public interface IUnitOfWork : IDisposable
 	{
-		IRepository<T> Repository<T>() where T : class;
+		IRepository<T> Repository<T>() where T : class, IHasId;
 		object Repository(Type type);
 		Task<int> SaveChangesAsync();
 	}
@@ -24,7 +25,7 @@ namespace ExplanatoryNoteAPI.Application.Services
 			_typeResolver = typeResolver;
 		}
 
-		public IRepository<T> Repository<T>() where T : class
+		public IRepository<T> Repository<T>() where T : class, IHasId
 		{
 			var type = typeof(T);
 
