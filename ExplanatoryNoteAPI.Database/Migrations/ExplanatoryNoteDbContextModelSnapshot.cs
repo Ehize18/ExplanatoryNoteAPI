@@ -575,7 +575,7 @@ namespace ExplanatoryNoteAPI.Database.Migrations
                     b.Property<Guid?>("IPId")
                         .HasColumnType("uuid");
 
-                    b.Property<Guid?>("OrgatizationId")
+                    b.Property<Guid?>("OrganizationId")
                         .HasColumnType("uuid");
 
                     b.Property<Guid?>("ProjectDocumentationAuthorsId")
@@ -600,7 +600,7 @@ namespace ExplanatoryNoteAPI.Database.Migrations
 
                     b.HasIndex("IPId");
 
-                    b.HasIndex("OrgatizationId");
+                    b.HasIndex("OrganizationId");
 
                     b.HasIndex("ProjectDocumentationAuthorsId");
 
@@ -4774,7 +4774,7 @@ namespace ExplanatoryNoteAPI.Database.Migrations
 
                     b.HasOne("ExplanatoryNoteAPI.Core.Entities.Organization", "Organization")
                         .WithMany()
-                        .HasForeignKey("OrgatizationId");
+                        .HasForeignKey("OrganizationId");
 
                     b.HasOne("ExplanatoryNoteAPI.Core.Entities.ProjectDocumentationAuthors", null)
                         .WithMany("ProjectDocumentationAuthor")

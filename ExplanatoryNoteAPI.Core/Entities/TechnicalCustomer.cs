@@ -29,5 +29,9 @@ namespace ExplanatoryNoteAPI.Core.Entities
 		[XmlIgnore]
 		[ForeignKey(nameof(SROMembership))]
 		public Guid? SROMembershipId { get; set; }
+
+		[XmlIgnore]
+		[ForeignKey(nameof(ExplanatoryNote))]
+		public Guid? ExplanatoryNoteId { get; set; }
 	}
 }

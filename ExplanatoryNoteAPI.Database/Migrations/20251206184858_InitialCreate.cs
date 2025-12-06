@@ -2200,7 +2200,7 @@ namespace ExplanatoryNoteAPI.Database.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    OrgatizationId = table.Column<Guid>(type: "uuid", nullable: true),
+                    OrganizationId = table.Column<Guid>(type: "uuid", nullable: true),
                     ForeignOrganizationId = table.Column<Guid>(type: "uuid", nullable: true),
                     IPId = table.Column<Guid>(type: "uuid", nullable: true),
                     SROMembershipId = table.Column<Guid>(type: "uuid", nullable: true),
@@ -2230,8 +2230,8 @@ namespace ExplanatoryNoteAPI.Database.Migrations
                         principalTable: "IP",
                         principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_Author_Organization_OrgatizationId",
-                        column: x => x.OrgatizationId,
+                        name: "FK_Author_Organization_OrganizationId",
+                        column: x => x.OrganizationId,
                         principalTable: "Organization",
                         principalColumn: "Id");
                     table.ForeignKey(
@@ -4374,9 +4374,9 @@ namespace ExplanatoryNoteAPI.Database.Migrations
                 column: "IPId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Author_OrgatizationId",
+                name: "IX_Author_OrganizationId",
                 table: "Author",
-                column: "OrgatizationId");
+                column: "OrganizationId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Author_ProjectDocumentationAuthorsId",
@@ -7159,7 +7159,7 @@ namespace ExplanatoryNoteAPI.Database.Migrations
                 table: "Author");
 
             migrationBuilder.DropForeignKey(
-                name: "FK_Author_Organization_OrgatizationId",
+                name: "FK_Author_Organization_OrganizationId",
                 table: "Author");
 
             migrationBuilder.DropForeignKey(

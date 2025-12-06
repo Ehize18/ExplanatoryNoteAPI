@@ -14,7 +14,7 @@ namespace ExplanatoryNoteAPI.Core.Entities
 
 		[XmlIgnore]
 		[ForeignKey(nameof(Organization))]
-		public Guid? OrgatizationId { get; set; }
+		public Guid? OrganizationId { get; set; }
 
 		[XmlElement("ForeignOrganization")]
 		public ForeignOrganization? ForeignOrganization { get; set; }

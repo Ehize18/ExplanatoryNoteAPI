@@ -24,10 +24,16 @@ namespace ExplanatoryNoteAPI.Core.Classificators
 		[ForeignKey(nameof(LandCategory))]
 		public Guid? LandCategoryId { get; set; }
 
-		public NonIndustrialObject? NonIndustrialObject { get; set; }
+		//public NonIndustrialObject? NonIndustrialObject { get; set; }
 
 		[ForeignKey(nameof(NonIndustrialObject))]
 		public Guid? NonIndustrialObjectId { get; set; }
+
+		[ForeignKey(nameof(IndustrialObject))]
+		public Guid? IndustrialObjectId { get; set; }
+
+		[ForeignKey(nameof(LinearObject))]
+		public Guid? LinearObjectId { get; set; }
 	}
 
 	public class ClimateDistrict : BaseClassificator
