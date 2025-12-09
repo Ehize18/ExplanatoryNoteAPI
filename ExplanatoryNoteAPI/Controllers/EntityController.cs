@@ -6,6 +6,7 @@ using System.Xml.Serialization;
 using ExplanatoryNoteAPI.Application.Services;
 using ExplanatoryNoteAPI.Core;
 using ExplanatoryNoteAPI.Core.Entities;
+using ExplanatoryNoteAPI.Core.Entities.TextBlockEntities;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Linq;
 
@@ -98,7 +99,16 @@ namespace ExplanatoryNoteAPI.Controllers
 			try
 			{
 				var type = _typeResolver.ResolveType(entityType);
-				var entity = payload.ToObject(type);
+				object? entity;
+
+				if (type == typeof(TextBlock))
+				{
+					entity = ParseTextBlock(payload);
+				}
+				else
+				{
+					entity = payload.ToObject(type);
+				}
 
 				await _dataService.CreateAsync(type, entity);
 
@@ -126,7 +136,16 @@ namespace ExplanatoryNoteAPI.Controllers
 			try
 			{
 				var type = _typeResolver.ResolveType(entityType);
-				var entity = payload.ToObject(type);
+				object? entity;
+
+				if (type == typeof(TextBlock))
+				{
+					entity = ParseTextBlock(payload);
+				}
+				else
+				{
+					entity = payload.ToObject(type);
+				}
 
 				var dbEntity = await _dataService.GetByIdAsync(type, id);
 
@@ -152,6 +171,68 @@ namespace ExplanatoryNoteAPI.Controllers
 			{
 				return BadRequest(new { message = ex.Message });
 			}
+		}
+
+		private object? ParseTextBlock(JObject textObject)
+		{
+			var elementsToken = textObject["Elements"];
+			var elementsList = new List<BaseTextBlockElement>();
+			if (elementsToken != null)
+			{
+				foreach (var elementToken in elementsToken)
+				{
+					var element = this.ParseTextBlockElement(elementToken.ToString());
+					if (element != null)
+					{
+						elementsList.Add(element);
+					}
+				}
+				textObject.Remove("Elements");
+			}
+			var entity = textObject.ToObject(typeof(TextBlock));
+			textObject["Elements"] = elementsToken;
+			if (elementsList.Count > 0)
+			{
+				((TextBlock)entity).Elements = elementsList;
+			}
+			return entity;
+		}
+
+		private BaseTextBlockElement? ParseTextBlockElement(string text)
+		{
+			BaseTextBlockElement? result;
+			try
+			{
+				result = JsonSerializer.Deserialize<TextBlockTable>(text);
+			}
+			catch
+			{
+				try
+				{
+					result = JsonSerializer.Deserialize<TextBlockImage>(text);
+				}
+				catch
+				{
+					try
+					{
+						result = JsonSerializer.Deserialize<TextBlockText>(text);
+					}
+					catch
+					{
+						try
+						{
+							result = JsonSerializer.Deserialize<TextBlockSubTitle>(text);
+						}
+						catch
+						{
+							result = null;
+						}
+					}
+				}
+
+			}
+
+			return result;
 		}
 
 		/// <summary>

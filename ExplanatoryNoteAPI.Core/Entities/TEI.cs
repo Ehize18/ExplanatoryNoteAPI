@@ -15,7 +15,14 @@ namespace ExplanatoryNoteAPI.Core.Entities
 
 		[XmlElement("Measure")]
 		[NotMapped]
-		public string? Measure => this.OKEI?.Code;
+		public string? Measure
+		{
+			get
+			{
+				return this.OKEI?.Code;
+			}
+			set { }
+		}
 
 		[XmlIgnore]
 		public OKEI? OKEI { get; set; }

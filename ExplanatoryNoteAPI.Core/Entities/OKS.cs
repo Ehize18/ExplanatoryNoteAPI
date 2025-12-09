@@ -49,7 +49,14 @@ namespace ExplanatoryNoteAPI.Core.Entities
 
 		[XmlElement("DangerousIndustrialObject")]
 		[NotMapped]
-		public string? DangerousIndustrialObjectCode => this.DangerousIndustrialObject?.Code;
+		public string? DangerousIndustrialObjectCode
+		{
+			get
+			{
+				return this.DangerousIndustrialObject?.Code;
+			}
+			set { }
+		}
 
 		[XmlIgnore]
 		public DangerIndustrialClass? DangerousIndustrialObject { get; set; }
@@ -60,7 +67,14 @@ namespace ExplanatoryNoteAPI.Core.Entities
 
 		[XmlElement("FireDangerCategory")]
 		[NotMapped]
-		public string? FireDangerCategoryCode => this.FireDangerCategory?.Code;
+		public string? FireDangerCategoryCode
+		{
+			get
+			{
+				return this.FireDangerCategory?.Code;
+			}
+			set { }
+		}
 
 		[XmlIgnore]
 		public FireDangerCategory? FireDangerCategory { get; set; }
@@ -78,7 +92,14 @@ namespace ExplanatoryNoteAPI.Core.Entities
 
 		[XmlElement("ResponsibilityLevel")]
 		[NotMapped]
-		public string? ResponsibilityLevelCode => this.ResponsibilityLevel?.Code;
+		public string? ResponsibilityLevelCode
+		{
+			get
+			{
+				return this.ResponsibilityLevel?.Code;
+			}
+			set { }
+		}
 
 		[XmlIgnore]
 		public ResponsibilityLevel? ResponsibilityLevel { get; set; }

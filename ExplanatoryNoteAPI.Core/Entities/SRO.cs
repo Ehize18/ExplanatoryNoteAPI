@@ -12,7 +12,14 @@ namespace ExplanatoryNoteAPI.Core.Entities
 	{
 		[XmlAttribute("SROType")]
 		[NotMapped]
-		public string? SROTypeCode => this.SROType?.Code;
+		public string? SROTypeCode
+		{
+			get
+			{
+				return this.SROType?.Code;
+			}
+			set { }
+		}
 
 		[XmlIgnore]
 		public SROType? SROType { get; set; }

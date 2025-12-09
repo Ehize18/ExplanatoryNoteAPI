@@ -27,7 +27,14 @@ namespace ExplanatoryNoteAPI.Core.Entities
 
 		[XmlElement("role")]
 		[NotMapped]
-		public string? RoleCode => this.Role?.Code;
+		public string? RoleCode
+		{
+			get
+			{
+				return this.Role?.Code;
+			}
+			set { }
+		}
 
 		[XmlIgnore]
 		public ParticipantResponsibilityLevel? Role { get; set; }

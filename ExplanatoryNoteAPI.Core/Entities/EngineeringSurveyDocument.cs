@@ -12,7 +12,14 @@ namespace ExplanatoryNoteAPI.Core.Entities
 	{
 		[XmlElement("DocType")]
 		[NotMapped]
-		public string? DocTypeCode => this.DocumentType?.Code;
+		public string? DocTypeCode
+		{
+			get
+			{
+				return this.DocumentType?.Code;
+			}
+			set { }
+		}
 
 		[XmlIgnore]
 		public DocumentType? DocumentType { get; set; }

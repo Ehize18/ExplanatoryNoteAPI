@@ -325,33 +325,6 @@ namespace ExplanatoryNoteAPI.Database.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Cell",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    Value = table.Column<string>(type: "text", nullable: false),
-                    AlignEnum = table.Column<int>(type: "integer", nullable: true),
-                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    CreatedById = table.Column<Guid>(type: "uuid", nullable: true),
-                    UpdatedById = table.Column<Guid>(type: "uuid", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Cell", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Cell_SysUser_CreatedById",
-                        column: x => x.CreatedById,
-                        principalTable: "SysUser",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_Cell_SysUser_UpdatedById",
-                        column: x => x.UpdatedById,
-                        principalTable: "SysUser",
-                        principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
                 name: "ChiefProjectEngineer",
                 columns: table => new
                 {
@@ -763,37 +736,6 @@ namespace ExplanatoryNoteAPI.Database.Migrations
                         principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Data_SysUser_UpdatedById",
-                        column: x => x.UpdatedById,
-                        principalTable: "SysUser",
-                        principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Row",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    CellId = table.Column<Guid>(type: "uuid", nullable: true),
-                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    CreatedById = table.Column<Guid>(type: "uuid", nullable: true),
-                    UpdatedById = table.Column<Guid>(type: "uuid", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Row", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Row_Cell_CellId",
-                        column: x => x.CellId,
-                        principalTable: "Cell",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_Row_SysUser_CreatedById",
-                        column: x => x.CreatedById,
-                        principalTable: "SysUser",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_Row_SysUser_UpdatedById",
                         column: x => x.UpdatedById,
                         principalTable: "SysUser",
                         principalColumn: "Id");
@@ -2751,6 +2693,7 @@ namespace ExplanatoryNoteAPI.Database.Migrations
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     Title = table.Column<string>(type: "text", nullable: true),
+                    Json = table.Column<string>(type: "text", nullable: false),
                     ExplanatoryNoteId = table.Column<Guid>(type: "uuid", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
@@ -2899,39 +2842,6 @@ namespace ExplanatoryNoteAPI.Database.Migrations
                     table.ForeignKey(
                         name: "FK_GasNetworksFeatures_TextBlock_StrengthCalculationId",
                         column: x => x.StrengthCalculationId,
-                        principalTable: "TextBlock",
-                        principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Image",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    Type = table.Column<string>(type: "text", nullable: true),
-                    Comment = table.Column<string>(type: "text", nullable: true),
-                    TextBlockId = table.Column<Guid>(type: "uuid", nullable: true),
-                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    CreatedById = table.Column<Guid>(type: "uuid", nullable: true),
-                    UpdatedById = table.Column<Guid>(type: "uuid", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Image", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Image_SysUser_CreatedById",
-                        column: x => x.CreatedById,
-                        principalTable: "SysUser",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_Image_SysUser_UpdatedById",
-                        column: x => x.UpdatedById,
-                        principalTable: "SysUser",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_Image_TextBlock_TextBlockId",
-                        column: x => x.TextBlockId,
                         principalTable: "TextBlock",
                         principalColumn: "Id");
                 });
@@ -3237,49 +3147,6 @@ namespace ExplanatoryNoteAPI.Database.Migrations
                     table.ForeignKey(
                         name: "FK_StagesInfo_TextBlock_ReasonNoteId",
                         column: x => x.ReasonNoteId,
-                        principalTable: "TextBlock",
-                        principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Table",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    TitleRowId = table.Column<Guid>(type: "uuid", nullable: true),
-                    RowId = table.Column<Guid>(type: "uuid", nullable: true),
-                    TextBlockId = table.Column<Guid>(type: "uuid", nullable: true),
-                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    CreatedById = table.Column<Guid>(type: "uuid", nullable: true),
-                    UpdatedById = table.Column<Guid>(type: "uuid", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Table", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Table_Row_RowId",
-                        column: x => x.RowId,
-                        principalTable: "Row",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_Table_Row_TitleRowId",
-                        column: x => x.TitleRowId,
-                        principalTable: "Row",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_Table_SysUser_CreatedById",
-                        column: x => x.CreatedById,
-                        principalTable: "SysUser",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_Table_SysUser_UpdatedById",
-                        column: x => x.UpdatedById,
-                        principalTable: "SysUser",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_Table_TextBlock_TextBlockId",
-                        column: x => x.TextBlockId,
                         principalTable: "TextBlock",
                         principalColumn: "Id");
                 });
@@ -4414,16 +4281,6 @@ namespace ExplanatoryNoteAPI.Database.Migrations
                 column: "UpdatedById");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Cell_CreatedById",
-                table: "Cell",
-                column: "CreatedById");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Cell_UpdatedById",
-                table: "Cell",
-                column: "UpdatedById");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_ChiefProjectEngineer_CreatedById",
                 table: "ChiefProjectEngineer",
                 column: "CreatedById");
@@ -4956,21 +4813,6 @@ namespace ExplanatoryNoteAPI.Database.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_GasNetworksFeatures_UpdatedById",
                 table: "GasNetworksFeatures",
-                column: "UpdatedById");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Image_CreatedById",
-                table: "Image",
-                column: "CreatedById");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Image_TextBlockId",
-                table: "Image",
-                column: "TextBlockId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Image_UpdatedById",
-                table: "Image",
                 column: "UpdatedById");
 
             migrationBuilder.CreateIndex(
@@ -6164,21 +6006,6 @@ namespace ExplanatoryNoteAPI.Database.Migrations
                 column: "UpdatedById");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Row_CellId",
-                table: "Row",
-                column: "CellId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Row_CreatedById",
-                table: "Row",
-                column: "CreatedById");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Row_UpdatedById",
-                table: "Row",
-                column: "UpdatedById");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Section5_CreatedById",
                 table: "Section5",
                 column: "CreatedById");
@@ -6501,31 +6328,6 @@ namespace ExplanatoryNoteAPI.Database.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_StateCustomerSource_UpdatedById",
                 table: "StateCustomerSource",
-                column: "UpdatedById");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Table_CreatedById",
-                table: "Table",
-                column: "CreatedById");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Table_RowId",
-                table: "Table",
-                column: "RowId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Table_TextBlockId",
-                table: "Table",
-                column: "TextBlockId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Table_TitleRowId",
-                table: "Table",
-                column: "TitleRowId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Table_UpdatedById",
-                table: "Table",
                 column: "UpdatedById");
 
             migrationBuilder.CreateIndex(
@@ -7448,9 +7250,6 @@ namespace ExplanatoryNoteAPI.Database.Migrations
                 name: "Developer");
 
             migrationBuilder.DropTable(
-                name: "Image");
-
-            migrationBuilder.DropTable(
                 name: "LandAreaInfo");
 
             migrationBuilder.DropTable(
@@ -7491,9 +7290,6 @@ namespace ExplanatoryNoteAPI.Database.Migrations
 
             migrationBuilder.DropTable(
                 name: "StateCustomerSource");
-
-            migrationBuilder.DropTable(
-                name: "Table");
 
             migrationBuilder.DropTable(
                 name: "TEI");
@@ -7544,9 +7340,6 @@ namespace ExplanatoryNoteAPI.Database.Migrations
                 name: "TechnicalCustomer");
 
             migrationBuilder.DropTable(
-                name: "Row");
-
-            migrationBuilder.DropTable(
                 name: "OKEI");
 
             migrationBuilder.DropTable(
@@ -7557,9 +7350,6 @@ namespace ExplanatoryNoteAPI.Database.Migrations
 
             migrationBuilder.DropTable(
                 name: "ProjectDocument");
-
-            migrationBuilder.DropTable(
-                name: "Cell");
 
             migrationBuilder.DropTable(
                 name: "ProjectDocParticipants");

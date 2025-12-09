@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace ExplanatoryNoteAPI.Database.Migrations
 {
     [DbContext(typeof(ExplanatoryNoteDbContext))]
-    [Migration("20251206184858_InitialCreate")]
+    [Migration("20251209134001_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -652,40 +652,6 @@ namespace ExplanatoryNoteAPI.Database.Migrations
                     b.HasIndex("UpdatedById");
 
                     b.ToTable("BudgetSource");
-                });
-
-            modelBuilder.Entity("ExplanatoryNoteAPI.Core.Entities.Cell", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<int?>("AlignEnum")
-                        .HasColumnType("integer");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid?>("CreatedById")
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid?>("UpdatedById")
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("Value")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CreatedById");
-
-                    b.HasIndex("UpdatedById");
-
-                    b.ToTable("Cell");
                 });
 
             modelBuilder.Entity("ExplanatoryNoteAPI.Core.Entities.ChiefProjectEngineer", b =>
@@ -1800,44 +1766,6 @@ namespace ExplanatoryNoteAPI.Database.Migrations
                     b.HasIndex("UpdatedById");
 
                     b.ToTable("IP");
-                });
-
-            modelBuilder.Entity("ExplanatoryNoteAPI.Core.Entities.Image", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("Comment")
-                        .HasColumnType("text");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid?>("CreatedById")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid?>("TextBlockId")
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("Type")
-                        .HasColumnType("text");
-
-                    b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid?>("UpdatedById")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CreatedById");
-
-                    b.HasIndex("TextBlockId");
-
-                    b.HasIndex("UpdatedById");
-
-                    b.ToTable("Image");
                 });
 
             modelBuilder.Entity("ExplanatoryNoteAPI.Core.Entities.IndustrialObject", b =>
@@ -3698,38 +3626,6 @@ namespace ExplanatoryNoteAPI.Database.Migrations
                     b.ToTable("Routes");
                 });
 
-            modelBuilder.Entity("ExplanatoryNoteAPI.Core.Entities.Row", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid?>("CellId")
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid?>("CreatedById")
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid?>("UpdatedById")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CellId");
-
-                    b.HasIndex("CreatedById");
-
-                    b.HasIndex("UpdatedById");
-
-                    b.ToTable("Row");
-                });
-
             modelBuilder.Entity("ExplanatoryNoteAPI.Core.Entities.SRO", b =>
                 {
                     b.Property<Guid>("Id")
@@ -4444,48 +4340,6 @@ namespace ExplanatoryNoteAPI.Database.Migrations
                     b.ToTable("TEI");
                 });
 
-            modelBuilder.Entity("ExplanatoryNoteAPI.Core.Entities.Table", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid?>("CreatedById")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid?>("RowId")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid?>("TextBlockId")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid?>("TitleRowId")
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid?>("UpdatedById")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CreatedById");
-
-                    b.HasIndex("RowId");
-
-                    b.HasIndex("TextBlockId");
-
-                    b.HasIndex("TitleRowId");
-
-                    b.HasIndex("UpdatedById");
-
-                    b.ToTable("Table");
-                });
-
             modelBuilder.Entity("ExplanatoryNoteAPI.Core.Entities.TechnicalCustomer", b =>
                 {
                     b.Property<Guid>("Id")
@@ -4547,6 +4401,10 @@ namespace ExplanatoryNoteAPI.Database.Migrations
 
                     b.Property<Guid?>("ExplanatoryNoteId")
                         .HasColumnType("uuid");
+
+                    b.Property<string>("Json")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<string>("Title")
                         .HasColumnType("text");
@@ -4704,13 +4562,11 @@ namespace ExplanatoryNoteAPI.Database.Migrations
                         .WithMany("LandCategoryMappings")
                         .HasForeignKey("LinearObjectId");
 
-                    b.HasOne("ExplanatoryNoteAPI.Core.Entities.NonIndustrialObject", "NonIndustrialObject")
+                    b.HasOne("ExplanatoryNoteAPI.Core.Entities.NonIndustrialObject", null)
                         .WithMany("LandCategoryMappings")
                         .HasForeignKey("NonIndustrialObjectId");
 
                     b.Navigation("LandCategory");
-
-                    b.Navigation("NonIndustrialObject");
                 });
 
             modelBuilder.Entity("ExplanatoryNoteAPI.Core.Entities.AdditionalData", b =>
@@ -4823,21 +4679,6 @@ namespace ExplanatoryNoteAPI.Database.Migrations
                         .HasForeignKey("UpdatedById");
 
                     b.Navigation("BudgetLevel");
-
-                    b.Navigation("CreatedBy");
-
-                    b.Navigation("UpdatedBy");
-                });
-
-            modelBuilder.Entity("ExplanatoryNoteAPI.Core.Entities.Cell", b =>
-                {
-                    b.HasOne("ExplanatoryNoteAPI.Core.Entities.SysUser", "CreatedBy")
-                        .WithMany()
-                        .HasForeignKey("CreatedById");
-
-                    b.HasOne("ExplanatoryNoteAPI.Core.Entities.SysUser", "UpdatedBy")
-                        .WithMany()
-                        .HasForeignKey("UpdatedById");
 
                     b.Navigation("CreatedBy");
 
@@ -5581,25 +5422,6 @@ namespace ExplanatoryNoteAPI.Database.Migrations
                     b.Navigation("CreatedBy");
 
                     b.Navigation("PostAddress");
-
-                    b.Navigation("UpdatedBy");
-                });
-
-            modelBuilder.Entity("ExplanatoryNoteAPI.Core.Entities.Image", b =>
-                {
-                    b.HasOne("ExplanatoryNoteAPI.Core.Entities.SysUser", "CreatedBy")
-                        .WithMany()
-                        .HasForeignKey("CreatedById");
-
-                    b.HasOne("ExplanatoryNoteAPI.Core.Entities.TextBlock", null)
-                        .WithMany("Image")
-                        .HasForeignKey("TextBlockId");
-
-                    b.HasOne("ExplanatoryNoteAPI.Core.Entities.SysUser", "UpdatedBy")
-                        .WithMany()
-                        .HasForeignKey("UpdatedById");
-
-                    b.Navigation("CreatedBy");
 
                     b.Navigation("UpdatedBy");
                 });
@@ -7074,27 +6896,6 @@ namespace ExplanatoryNoteAPI.Database.Migrations
                     b.Navigation("UpdatedBy");
                 });
 
-            modelBuilder.Entity("ExplanatoryNoteAPI.Core.Entities.Row", b =>
-                {
-                    b.HasOne("ExplanatoryNoteAPI.Core.Entities.Cell", "Cell")
-                        .WithMany()
-                        .HasForeignKey("CellId");
-
-                    b.HasOne("ExplanatoryNoteAPI.Core.Entities.SysUser", "CreatedBy")
-                        .WithMany()
-                        .HasForeignKey("CreatedById");
-
-                    b.HasOne("ExplanatoryNoteAPI.Core.Entities.SysUser", "UpdatedBy")
-                        .WithMany()
-                        .HasForeignKey("UpdatedById");
-
-                    b.Navigation("Cell");
-
-                    b.Navigation("CreatedBy");
-
-                    b.Navigation("UpdatedBy");
-                });
-
             modelBuilder.Entity("ExplanatoryNoteAPI.Core.Entities.SRO", b =>
                 {
                     b.HasOne("ExplanatoryNoteAPI.Core.Entities.SysUser", "CreatedBy")
@@ -7565,37 +7366,6 @@ namespace ExplanatoryNoteAPI.Database.Migrations
                     b.Navigation("UpdatedBy");
                 });
 
-            modelBuilder.Entity("ExplanatoryNoteAPI.Core.Entities.Table", b =>
-                {
-                    b.HasOne("ExplanatoryNoteAPI.Core.Entities.SysUser", "CreatedBy")
-                        .WithMany()
-                        .HasForeignKey("CreatedById");
-
-                    b.HasOne("ExplanatoryNoteAPI.Core.Entities.Row", "Row")
-                        .WithMany()
-                        .HasForeignKey("RowId");
-
-                    b.HasOne("ExplanatoryNoteAPI.Core.Entities.TextBlock", null)
-                        .WithMany("Table")
-                        .HasForeignKey("TextBlockId");
-
-                    b.HasOne("ExplanatoryNoteAPI.Core.Entities.Row", "TitleRow")
-                        .WithMany()
-                        .HasForeignKey("TitleRowId");
-
-                    b.HasOne("ExplanatoryNoteAPI.Core.Entities.SysUser", "UpdatedBy")
-                        .WithMany()
-                        .HasForeignKey("UpdatedById");
-
-                    b.Navigation("CreatedBy");
-
-                    b.Navigation("Row");
-
-                    b.Navigation("TitleRow");
-
-                    b.Navigation("UpdatedBy");
-                });
-
             modelBuilder.Entity("ExplanatoryNoteAPI.Core.Entities.TechnicalCustomer", b =>
                 {
                     b.HasOne("ExplanatoryNoteAPI.Core.Entities.SysUser", "CreatedBy")
@@ -7904,13 +7674,6 @@ namespace ExplanatoryNoteAPI.Database.Migrations
             modelBuilder.Entity("ExplanatoryNoteAPI.Core.Entities.StagesInfo", b =>
                 {
                     b.Navigation("Stage");
-                });
-
-            modelBuilder.Entity("ExplanatoryNoteAPI.Core.Entities.TextBlock", b =>
-                {
-                    b.Navigation("Image");
-
-                    b.Navigation("Table");
                 });
 
             modelBuilder.Entity("ExplanatoryNoteAPI.Core.Entities.UsedNorms", b =>

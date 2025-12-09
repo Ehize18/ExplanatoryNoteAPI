@@ -12,7 +12,14 @@ namespace ExplanatoryNoteAPI.Core.Entities
 	{
 		[XmlElement("BudgetLevel")]
 		[NotMapped]
-		public string? BudgetLevelCode => this.BudgetLevel?.Code;
+		public string? BudgetLevelCode
+		{
+			get
+			{
+				return this.BudgetLevel?.Code;
+			}
+			set { }
+		}
 
 		[XmlIgnore]
 		public BudgetLevel? BudgetLevel { get; set; }

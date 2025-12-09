@@ -15,7 +15,10 @@ namespace ExplanatoryNoteAPI.Core.Entities
 
 		[XmlAttribute("Placement")]
 		[NotMapped]
-		public string? PlacementCode => this.Placement?.Code;
+		public string? PlacementCode
+		{
+			get { return this.Placement?.Code; } set { } 
+		}
 
 		[XmlIgnore]
 		public Placement? Placement { get; set; }
@@ -26,7 +29,10 @@ namespace ExplanatoryNoteAPI.Core.Entities
 
 		[XmlAttribute("DangerousAndComplex")]
 		[NotMapped]
-		public string? DangerousAndComplexCode => this.DangerousAndComplex?.Code;
+		public string? DangerousAndComplexCode
+		{
+			get { return this.DangerousAndComplex?.Code; } set { }
+		}
 
 		[XmlIgnore]
 		public DangerousAndComplex? DangerousAndComplex { get; set; }
@@ -37,7 +43,10 @@ namespace ExplanatoryNoteAPI.Core.Entities
 
 		[XmlAttribute("Unique")]
 		[NotMapped]
-		public string? UniqueCode => this.Unique?.Code;
+		public string? UniqueCode
+		{
+			get { return this.Unique?.Code; } set { }
+		}
 
 		[XmlIgnore]
 		public Unique? Unique { get; set; }
@@ -51,7 +60,14 @@ namespace ExplanatoryNoteAPI.Core.Entities
 
 		[XmlElement("ConstructionType")]
 		[NotMapped]
-		public string? ConstructionTypeCode => this.ConstractionType?.Code;
+		public string? ConstructionTypeCode
+		{
+			get
+			{
+				return this.ConstractionType?.Code;
+			}
+			set { }
+		}
 
 		[XmlIgnore]
 		public ConstractionType? ConstractionType { get; set; }
@@ -111,7 +127,14 @@ namespace ExplanatoryNoteAPI.Core.Entities
 
 		[XmlElement("DangerousIndustrialObject")]
 		[NotMapped]
-		public string? DangerousIndustrialObject => this.DangerIndustrialClass?.Code;
+		public string? DangerousIndustrialObject
+		{
+			get
+			{
+				return this.DangerIndustrialClass?.Code;
+			}
+			set { }
+		}
 
 		[XmlIgnore]
 		public DangerIndustrialClass? DangerIndustrialClass { get; set; }
@@ -122,7 +145,14 @@ namespace ExplanatoryNoteAPI.Core.Entities
 
 		[XmlElement("FireDangerCategory")]
 		[NotMapped]
-		public string? FireDangerCategoryCode => this.FireDangerCategory?.Code;
+		public string? FireDangerCategoryCode
+		{
+			get
+			{
+				return this.FireDangerCategory?.Code;
+			}
+			set { }
+		}
 
 		[XmlIgnore]
 		public FireDangerCategory? FireDangerCategory { get; set; }
@@ -140,7 +170,14 @@ namespace ExplanatoryNoteAPI.Core.Entities
 
 		[XmlElement("ResponsibilityLevel")]
 		[NotMapped]
-		public string? ResponsibilityLevelCode => this.ResponsibilityLevel?.Code;
+		public string? ResponsibilityLevelCode
+		{
+			get
+			{
+				return this.ResponsibilityLevel?.Code;
+			}
+			set { }
+		}
 
 		[XmlIgnore]
 		public ResponsibilityLevel? ResponsibilityLevel { get; set; }

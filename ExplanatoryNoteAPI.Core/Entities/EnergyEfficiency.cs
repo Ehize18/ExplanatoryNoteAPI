@@ -12,7 +12,14 @@ namespace ExplanatoryNoteAPI.Core.Entities
 	{
 		[XmlElement("EnergyEfficiencyClass")]
 		[NotMapped]
-		public string? EnergyEfficiencyClassCode => this.EnergyEfficiencyClass?.Code;
+		public string? EnergyEfficiencyClassCode
+		{
+			get
+			{
+				return this.EnergyEfficiencyClass?.Code;
+			}
+			set { }
+		}
 
 		[XmlIgnore]
 		public EfficiencyClass? EnergyEfficiencyClass { get; set; }

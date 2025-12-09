@@ -15,7 +15,14 @@ namespace ExplanatoryNoteAPI.Core.Entities
 
 		[XmlElement("LandCategory")]
 		[NotMapped]
-		public string? LandCategoryCode => this.LandCategory?.Code;
+		public string? LandCategoryCode
+		{
+			get
+			{
+				return this.LandCategory?.Code;
+			}
+			set { }
+		}
 
 		[XmlIgnore]
 		public LandCategory? LandCategory { get; set; }

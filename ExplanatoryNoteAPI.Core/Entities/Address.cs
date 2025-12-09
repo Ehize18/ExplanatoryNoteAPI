@@ -15,7 +15,14 @@ namespace ExplanatoryNoteAPI.Core.Entities
 
 		[XmlElement("Region")]
 		[NotMapped]
-		public string? RegionCode => this.Region?.Code;
+		public string? RegionCode
+		{
+			get
+			{
+				return this.Region?.Code;
+			}
+			set { }
+		}
 
 		[XmlIgnore]
 		public RegionsRF? Region { get; set; }
