@@ -55,12 +55,12 @@ namespace ExplanatoryNoteAPI.Core.Entities
 
 	public class ClimateConditionsSeismicActivity : BaseEntity
 	{
-		public required ClimateConditions ClimateConditions { get; set; }
+		//public ClimateConditions ClimateConditions { get; set; }
 
 		[ForeignKey(nameof(ClimateConditions))]
 		public Guid ClimateConditionsId { get; set; }
 
-		public required SeismicActivity SeismicActivity { get; set; }
+		public SeismicActivity SeismicActivity { get; set; }
 
 		[ForeignKey(nameof(SeismicActivity))]
 		public Guid SeismicActivityId { get; set; }
@@ -68,12 +68,12 @@ namespace ExplanatoryNoteAPI.Core.Entities
 
 	public class ClimateConditionsSnowDistrict : BaseEntity
 	{
-		public required ClimateConditions ClimateConditions { get; set; }
+		//public ClimateConditions ClimateConditions { get; set; }
 
 		[ForeignKey(nameof(ClimateConditions))]
 		public Guid ClimateConditionsId { get; set; }
 
-		public required SnowDistrict SnowDistrict { get; set; }
+		public SnowDistrict SnowDistrict { get; set; }
 
 		[ForeignKey(nameof(SnowDistrict))]
 		public Guid SnowDistrictId { get; set; }
@@ -81,12 +81,12 @@ namespace ExplanatoryNoteAPI.Core.Entities
 
 	public class ClimateConditionsWindDistrict : BaseEntity
 	{
-		public required ClimateConditions ClimateConditions { get; set; }
+		//public ClimateConditions ClimateConditions { get; set; }
 
 		[ForeignKey(nameof(ClimateConditions))]
 		public Guid ClimateConditionsId { get; set; }
 
-		public required WindDistrict WindDistrict { get; set; }
+		public WindDistrict WindDistrict { get; set; }
 
 		[ForeignKey(nameof(WindDistrict))]
 		public Guid WindDistrictId { get; set; }
@@ -94,12 +94,12 @@ namespace ExplanatoryNoteAPI.Core.Entities
 
 	public class ClimateConditionsGeologicalConditions : BaseEntity
 	{
-		public required ClimateConditions ClimateConditions { get; set; }
+		//public ClimateConditions ClimateConditions { get; set; }
 
 		[ForeignKey(nameof(ClimateConditions))]
 		public Guid ClimateConditionsId { get; set; }
 
-		public required GeologicalConditions GeologicalConditions { get; set; }
+		public GeologicalConditions GeologicalConditions { get; set; }
 
 		[ForeignKey(nameof(GeologicalConditions))]
 		public Guid GeologicalConditionsId { get; set; }
@@ -107,12 +107,12 @@ namespace ExplanatoryNoteAPI.Core.Entities
 
 	public class ClimateConditionsClimateDistrict : BaseEntity
 	{
-		public required ClimateConditions ClimateConditions { get; set; }
+		//public required ClimateConditions ClimateConditions { get; set; }
 
 		[ForeignKey(nameof(ClimateConditions))]
 		public Guid ClimateConditionsId { get; set; }
 
-		public required ClimateDistrict ClimateDistrict { get; set; }
+		public ClimateDistrict ClimateDistrict { get; set; }
 
 		[ForeignKey(nameof(ClimateDistrict))]
 		public Guid ClimateDistrictId { get; set; }
