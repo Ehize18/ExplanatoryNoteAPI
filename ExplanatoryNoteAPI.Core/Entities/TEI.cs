@@ -2,6 +2,7 @@
 using System.Xml.Serialization;
 using ExplanatoryNoteAPI.Core.Abstractions;
 using ExplanatoryNoteAPI.Core.Classificators;
+using Newtonsoft.Json;
 
 namespace ExplanatoryNoteAPI.Core.Entities
 {
@@ -41,29 +42,33 @@ namespace ExplanatoryNoteAPI.Core.Entities
 		public int Type { get; set; }
 
 
-		//[XmlIgnore]
-		//public NonIndustrialObject? NonIndustrialObject { get; set; }
+		[XmlIgnore]
+		[JsonIgnore]
+		public NonIndustrialObject? NonIndustrialObject { get; set; }
 
 		[XmlIgnore]
 		[ForeignKey(nameof(NonIndustrialObject))]
 		public Guid? NonIndustialObjectId { get; set; }
 
-		//[XmlIgnore]
-		//public IndustrialObject? IndustrialObject { get; set; }
+		[XmlIgnore]
+		[JsonIgnore]
+		public IndustrialObject? IndustrialObject { get; set; }
 
 		[XmlIgnore]
 		[ForeignKey(nameof(IndustrialObject))]
 		public Guid? IndustialObjectId { get; set; }
 
-		//[XmlIgnore]
-		//public LinearObject? LinearObject { get; set; }
+		[XmlIgnore]
+		[JsonIgnore]
+		public LinearObject? LinearObject { get; set; }
 
 		[XmlIgnore]
 		[ForeignKey(nameof(LinearObject))]
 		public Guid? LinearObjectId { get; set; }
 
-		//[XmlIgnore]
-		//public ComplexPart? ComplexPart { get; set; }
+		[XmlIgnore]
+		[JsonIgnore]
+		public ComplexPart? ComplexPart { get; set; }
 
 		[XmlIgnore]
 		[ForeignKey(nameof(ComplexPart))]

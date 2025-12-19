@@ -1,5 +1,7 @@
 ﻿using System.Text;
+using Amazon.S3;
 using ExplanatoryNoteAPI.Application.Interfaces;
+using ExplanatoryNoteAPI.Application.Options;
 using ExplanatoryNoteAPI.Application.Services;
 using ExplanatoryNoteAPI.Core;
 using ExplanatoryNoteAPI.Core.Entities;
@@ -91,6 +93,26 @@ namespace ExplanatoryNoteAPI
 						.AllowAnyHeader()
 						.AllowAnyMethod()
 						.AllowCredentials()));
+			return services;
+		}
+
+		public static IServiceCollection AddFileServices(this IServiceCollection services, IConfiguration config)
+		{
+			services.Configure<S3Options>(config.GetSection("S3"));
+			services.AddSingleton<IAmazonS3>(x =>
+			{
+				var s3Config = new AmazonS3Config
+				{
+					ServiceURL = config["S3:ServiceURL"],
+					ForcePathStyle = true
+				};
+				var accessKey = config["S3:AccessKey"];
+				var secretKey = config["S3:SecretKey"];
+				return new AmazonS3Client(accessKey, secretKey, s3Config);
+			});
+
+			services.AddScoped<IFileService, FileService>();
+
 			return services;
 		}
 	}

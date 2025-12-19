@@ -27,8 +27,21 @@ FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
 RUN dotnet publish "./ExplanatoryNoteAPI.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
 
+
+
 # Этот этап используется в рабочей среде или при запуске из VS в обычном режиме (по умолчанию, когда конфигурация отладки не используется)
 FROM base AS final
 WORKDIR /app
+RUN apt-get update
+RUN apt-get install -y libgdiplus wkhtmltopdf
+RUN apt-get install -y libc6-dev libjpeg62 xfonts-75dpi
+RUN ln -s /usr/lib/libgdiplus.so /lib/x86_64-linux-gnu/libgdiplus.so
+
+# Проверка расположения библиотек wkhtmltopdf и создание ссылок
+RUN ldconfig
+RUN if [ -f /usr/local/lib/libwkhtmltox.so ]; then ln -s /usr/local/lib/libwkhtmltox.so /usr/lib/libwkhtmltox.so; fi
+
+RUN apt-get clean && rm -rf /var/lib/apt/lists/*
+COPY ["ExplanatoryNoteAPI/explanatorynote-01-05.xsl", "/"]
 COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "ExplanatoryNoteAPI.dll"]

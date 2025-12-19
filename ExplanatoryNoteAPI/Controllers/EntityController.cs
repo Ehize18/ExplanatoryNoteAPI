@@ -3,12 +3,14 @@ using System.Text;
 using System.Text.Json;
 using System.Xml;
 using System.Xml.Serialization;
+using System.Xml.Xsl;
 using ExplanatoryNoteAPI.Application.Services;
 using ExplanatoryNoteAPI.Core;
 using ExplanatoryNoteAPI.Core.Entities;
 using ExplanatoryNoteAPI.Core.Entities.TextBlockEntities;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Linq;
+using WkHtmlToPdfDotNet;
 
 namespace ExplanatoryNoteAPI.Controllers
 {
@@ -329,6 +331,78 @@ namespace ExplanatoryNoteAPI.Controllers
 				"application/xml",
 				$"document_{id}.xml"
 			);
+		}
+
+		[HttpGet("fullNote/pdf/{id}")]
+		public async Task<IActionResult> GetFullNotePdf(Guid id)
+		{
+			var fullNote = await _exportService.GetFullNote(id);
+
+			var ns = new XmlSerializerNamespaces();
+			ns.Add("", "");
+
+			var serializer = new XmlSerializer(typeof(ExplanatoryNote));
+
+			using var memoryStream = new MemoryStream();
+
+
+			var settings = new XmlWriterSettings
+			{
+				Indent = true,
+				Encoding = Encoding.UTF8,
+				OmitXmlDeclaration = false
+			};
+
+			using (var writer = XmlWriter.Create(memoryStream, settings))
+			{
+				serializer.Serialize(writer, fullNote, ns);
+			}
+
+			var transform = new XslCompiledTransform();
+			transform.Load("explanatorynote-01-05.xsl");
+			using var resultwriter = new StringWriter();
+			memoryStream.Position = 0;
+			using (var xmlReader = XmlReader.Create(memoryStream))
+			{
+				transform.Transform(xmlReader, null, resultwriter);
+			}
+			var html = resultwriter.ToString();
+			
+			var pdfBytes = ConvertHtmlToPdfBytes(html);
+
+			return File(
+				pdfBytes,
+				"application/pdf",
+				$"document_{id}.pdf");
+		}
+
+		private byte[] ConvertHtmlToPdfBytes(string html)
+		{
+			var converter = new SynchronizedConverter(new PdfTools());
+
+			var doc = new HtmlToPdfDocument
+			{
+				GlobalSettings = new()
+				{
+					ColorMode = ColorMode.Color,
+					Orientation = Orientation.Portrait,
+					PaperSize = PaperKind.A4
+				},
+				Objects =
+				{
+					new ObjectSettings
+					{
+						HtmlContent = html,
+						WebSettings = { DefaultEncoding = "utf8" }
+					}
+				}
+			};
+
+			var pdfBytes = converter.Convert(doc);
+
+			//var pdf = ;
+
+			return pdfBytes;
 		}
 
 		private object ConvertId(string id)

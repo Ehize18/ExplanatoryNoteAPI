@@ -17,6 +17,24 @@ services:
     networks:
       - app_network
 
+  minio:
+    image: minio/minio:latest
+    restart: always
+    ports:
+      - 9000:9000
+      - 9001:9001
+    environment:
+      MINIO_ROOT_USER: admin
+      MINIO_ROOT_PASSWORD: password
+    command: server /data --console-address ":9001"
+    healthcheck:
+      test: ["CMD", "mc", "ready", "local"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - app_network
+
   explanatorynoteapi:
     image: ${DOCKER_REGISTRY-}explanatorynoteapi
     build:
@@ -24,6 +42,8 @@ services:
       dockerfile: ExplanatoryNoteAPI/Dockerfile
     depends_on:
       db:
+        condition: service_healthy
+      minio:
         condition: service_healthy
     ports:
       - 8080:8080

@@ -64,6 +64,7 @@ namespace ExplanatoryNoteAPI.Core.Entities
 		private List<string>? _jsonElements = new List<string>();
 
 		[XmlIgnore]
+		[Newtonsoft.Json.JsonIgnore]
 		public string Json
 		{
 			get
