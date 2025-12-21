@@ -1,5 +1,6 @@
 ﻿using System.Xml.Serialization;
 using ExplanatoryNoteAPI.Core.Abstractions;
+using Newtonsoft.Json;
 
 namespace ExplanatoryNoteAPI.Core.Entities
 {
@@ -19,6 +20,9 @@ namespace ExplanatoryNoteAPI.Core.Entities
 
 		public string Email { get; set; }
 
+		[JsonIgnore]
 		public string PasswordHash { get; set; }
+
+		public bool IsEmailConfirmed { get; set; }
 	}
 }

@@ -6,7 +6,7 @@ namespace ExplanatoryNoteAPI.Application.Services
 {
 	public interface IExportService
 	{
-		Task<ExplanatoryNote?> GetFullNote(Guid id);
+		Task<ExplanatoryNote?> GetFullNote(Guid id, Guid creatorId);
 	}
 
 	public class ExportService : IExportService
@@ -18,13 +18,13 @@ namespace ExplanatoryNoteAPI.Application.Services
 			_repositoryFactory = repositoryFactory;
 		}
 
-		public async Task<ExplanatoryNote?> GetFullNote(Guid id)
+		public async Task<ExplanatoryNote?> GetFullNote(Guid id, Guid creatorId)
 		{
 			var repository = _repositoryFactory.CreateRepository<ExplanatoryNote>();
 
 			if (repository is ExplanatoryNoteRepository explanatoryNoteRepository)
 			{
-				return await explanatoryNoteRepository.GetFullNote(id);
+				return await explanatoryNoteRepository.GetFullNote(id, creatorId);
 			}
 			else
 			{

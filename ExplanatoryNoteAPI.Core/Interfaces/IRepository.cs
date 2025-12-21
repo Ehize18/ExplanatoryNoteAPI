@@ -6,7 +6,7 @@ namespace ExplanatoryNoteAPI.Core.Interfaces
 	public interface IRepository<TEntity> where TEntity : class, IHasId
 	{
 		Task<TEntity?> GetByIdAsync(Guid id);
-		Task<IEnumerable<TEntity>> GetAllAsync();
+		Task<IEnumerable<TEntity>> GetAllAsync(Guid? creatorId);
 		Task<IEnumerable<TEntity>> FindAsync(Expression<Func<TEntity, bool>> predicate);
 		Task AddAsync(TEntity entity);
 		Task UpdateAsync(TEntity entity);

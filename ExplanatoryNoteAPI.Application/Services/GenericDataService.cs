@@ -7,7 +7,7 @@ namespace ExplanatoryNoteAPI.Application.Services
 	public interface IGenericDataService
 	{
 		Task<object> GetByIdAsync(Type entityType, object id);
-		Task<IEnumerable<object>> GetAllAsync(Type entityType);
+		Task<IEnumerable<object>> GetAllAsync(Type entityType, object CreatorId);
 		Task<IEnumerable<object>> FindAsync(Type entityType, string jsonPredicate);
 		Task<object> CreateAsync(Type entityType, object entity);
 		Task<bool> UpdateAsync(Type entityType, object entity);
@@ -41,7 +41,7 @@ namespace ExplanatoryNoteAPI.Application.Services
 			return resultProperty?.GetValue(task);
 		}
 
-		public async Task<IEnumerable<object>> GetAllAsync(Type entityType)
+		public async Task<IEnumerable<object>> GetAllAsync(Type entityType, object CreatorId)
 		{
 			ValidateType(entityType);
 
@@ -50,7 +50,7 @@ namespace ExplanatoryNoteAPI.Application.Services
 				.GetMethod(nameof(IRepository<IHasId>.GetAllAsync));
 
 			var repository = _unitOfWork.Repository(entityType);
-			var task = (Task)method.Invoke(repository, Array.Empty<object>());
+			var task = (Task)method.Invoke(repository, new[] { CreatorId });
 
 			await task.ConfigureAwait(false);
 			var resultProperty = task.GetType().GetProperty("Result");
@@ -64,7 +64,7 @@ namespace ExplanatoryNoteAPI.Application.Services
 			// Простой поиск по первому свойству
 			var properties = entityType.GetProperties(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.IgnoreCase);
 
-			return await GetAllAsync(entityType);
+			return await GetAllAsync(entityType, null);
 		}
 
 		public async Task<object> CreateAsync(Type entityType, object entity)

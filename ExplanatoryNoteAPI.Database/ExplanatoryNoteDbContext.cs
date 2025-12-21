@@ -101,6 +101,9 @@ namespace ExplanatoryNoteAPI.Database
 				.HasForeignKey(x => x.ExplanatoryNoteId)
 				.IsRequired(false);
 
+			modelBuilder.Entity<SysUser>()
+				.HasIndex(x => x.Email)
+				.IsUnique(true);
 		}
 
 		public override DbSet<TEntity> Set<TEntity>() where TEntity : class

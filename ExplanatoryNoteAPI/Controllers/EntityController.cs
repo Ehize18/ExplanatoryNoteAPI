@@ -6,8 +6,10 @@ using System.Xml.Serialization;
 using System.Xml.Xsl;
 using ExplanatoryNoteAPI.Application.Services;
 using ExplanatoryNoteAPI.Core;
+using ExplanatoryNoteAPI.Core.Abstractions;
 using ExplanatoryNoteAPI.Core.Entities;
 using ExplanatoryNoteAPI.Core.Entities.TextBlockEntities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Linq;
 using WkHtmlToPdfDotNet;
@@ -22,6 +24,19 @@ namespace ExplanatoryNoteAPI.Controllers
 		private readonly ITypeResolver _typeResolver;
 		private readonly ILogger<EntityController> _logger;
 		private readonly IExportService _exportService;
+
+		private SysUser SysUser
+		{
+			get
+			{
+				var id = HttpContext?.User?.Claims?.FirstOrDefault()?.Value;
+				if (id == null)
+				{
+					return new SysUser();
+				}
+				return (SysUser)_dataService.GetByIdAsync(typeof(SysUser), Guid.Parse(id)).GetAwaiter().GetResult();
+			}
+		}
 
 		public EntityController(
 			IGenericDataService dataService,
@@ -39,6 +54,7 @@ namespace ExplanatoryNoteAPI.Controllers
 		/// GET /api/entities/Organization/1
 		/// </summary>
 		[HttpGet("{entityType}/{id}")]
+		[Authorize]
 		public async Task<IActionResult> GetById(string entityType, string id)
 		{
 			try
@@ -52,6 +68,14 @@ namespace ExplanatoryNoteAPI.Controllers
 
 				if (result == null)
 					return NotFound(new { message = $"Entity '{entityType}' with id '{id}' not found" });
+
+				if (result is BaseEntity be)
+				{
+					if (be.CreatedById != SysUser.Id)
+					{
+						return NotFound(new { message = $"Entity '{entityType}' with id '{id}' not found" });
+					}
+				}
 
 				return Ok(result);
 			}
@@ -71,12 +95,13 @@ namespace ExplanatoryNoteAPI.Controllers
 		/// GET /api/entities/Organization
 		/// </summary>
 		[HttpGet("{entityType}")]
+		[Authorize]
 		public async Task<IActionResult> GetAll(string entityType, [FromQuery] int? skip = null, [FromQuery] int? take = null)
 		{
 			try
 			{
 				var type = _typeResolver.ResolveType(entityType);
-				var result = await _dataService.GetAllAsync(type);
+				var result = await _dataService.GetAllAsync(type, SysUser.Id);
 
 				if (skip.HasValue || take.HasValue)
 				{
@@ -96,6 +121,7 @@ namespace ExplanatoryNoteAPI.Controllers
 		/// Body: { "orgFullName": "ООО Компания", ... }
 		/// </summary>
 		[HttpPost("{entityType}")]
+		[Authorize]
 		public async Task<IActionResult> Create(string entityType, [FromBody] JObject payload)
 		{
 			try
@@ -110,6 +136,20 @@ namespace ExplanatoryNoteAPI.Controllers
 				else
 				{
 					entity = payload.ToObject(type);
+				}
+
+				var createdByIdProp = type.GetProperty("CreatedById");
+
+				if (createdByIdProp != null)
+				{
+					createdByIdProp.SetValue(entity, SysUser.Id);
+				}
+
+				var createdAtProp = type.GetProperty("CreatedAt");
+
+				if (createdAtProp != null)
+				{
+					createdAtProp.SetValue(entity, DateTime.UtcNow);
 				}
 
 				await _dataService.CreateAsync(type, entity);
@@ -133,6 +173,7 @@ namespace ExplanatoryNoteAPI.Controllers
 		/// Body: { "orgFullName": "Новое название", ... }
 		/// </summary>
 		[HttpPut("{entityType}/{id}")]
+		[Authorize]
 		public async Task<IActionResult> Update(string entityType, Guid id, [FromBody] JObject payload)
 		{
 			try
@@ -151,6 +192,14 @@ namespace ExplanatoryNoteAPI.Controllers
 
 				var dbEntity = await _dataService.GetByIdAsync(type, id);
 
+				if (dbEntity is BaseEntity be)
+				{
+					if (be.CreatedById != SysUser.Id)
+					{
+						return NotFound(new { message = $"Entity '{entityType}' with id '{id}' not found" });
+					}
+				}
+
 				var dict = payload.ToObject<Dictionary<string, object>>();
 
 				var properties = type.GetProperties();
@@ -160,6 +209,20 @@ namespace ExplanatoryNoteAPI.Controllers
 					var prop = properties.First(x => x.Name == key);
 					var newValue = prop.GetValue(entity);
 					prop.SetValue(dbEntity, newValue);
+				}
+
+				var updatedByIdProp = type.GetProperty("UpdatedById");
+
+				if (updatedByIdProp != null)
+				{
+					updatedByIdProp.SetValue(entity, SysUser.Id);
+				}
+
+				var updatedAtProp = type.GetProperty("UpdatedAt");
+
+				if (updatedAtProp != null)
+				{
+					updatedAtProp.SetValue(entity, DateTime.UtcNow);
 				}
 
 				var success = await _dataService.UpdateAsync(type, dbEntity);
@@ -241,12 +304,23 @@ namespace ExplanatoryNoteAPI.Controllers
 		/// DELETE /api/entities/Organization/1
 		/// </summary>
 		[HttpDelete("{entityType}/{id}")]
+		[Authorize]
 		public async Task<IActionResult> Delete(string entityType, string id)
 		{
 			try
 			{
 				var type = _typeResolver.ResolveType(entityType);
 				var convertedId = ConvertId(id);
+
+				var entity = await _dataService.GetByIdAsync(type, convertedId);
+
+				if (entity is BaseEntity be)
+				{
+					if (be.CreatedById != SysUser.Id)
+					{
+						return NotFound(new { message = $"Entity '{entityType}' with id '{id}' not found" });
+					}
+				}
 
 				var success = await _dataService.DeleteAsync(type, convertedId);
 
@@ -301,9 +375,10 @@ namespace ExplanatoryNoteAPI.Controllers
 		}
 
 		[HttpGet("fullNote/{id}")]
+		[Authorize]
 		public async Task<IActionResult> GetFullNote(Guid id)
 		{
-			var fullNote = await _exportService.GetFullNote(id);
+			var fullNote = await _exportService.GetFullNote(id, SysUser.Id);
 
 			var ns = new XmlSerializerNamespaces();
 			ns.Add("", "");
@@ -334,9 +409,10 @@ namespace ExplanatoryNoteAPI.Controllers
 		}
 
 		[HttpGet("fullNote/pdf/{id}")]
+		[Authorize]
 		public async Task<IActionResult> GetFullNotePdf(Guid id)
 		{
-			var fullNote = await _exportService.GetFullNote(id);
+			var fullNote = await _exportService.GetFullNote(id, SysUser.Id);
 
 			var ns = new XmlSerializerNamespaces();
 			ns.Add("", "");

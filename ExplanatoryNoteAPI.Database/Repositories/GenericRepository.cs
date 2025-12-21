@@ -29,6 +29,29 @@ namespace ExplanatoryNoteAPI.Database.Repositories
 			return await _dbSet.ToListAsync();
 		}
 
+		public async Task<IEnumerable<TEntity>> GetAllAsync(Guid? creatorId)
+		{
+			var interfaceType = typeof(TEntity).GetInterface(nameof(IHasCreator));
+
+			if (interfaceType == null)
+			{
+				return await GetAllAsync();
+			}
+
+			var property = typeof(TEntity).GetProperty(nameof(IHasCreator.CreatedById));
+			if (property == null)
+			{
+				return await GetAllAsync();
+			}
+
+			var parameter = Expression.Parameter(typeof(TEntity), "x");
+			var propertyAccess = Expression.Property(parameter, property);
+			var equality = Expression.Equal(propertyAccess, Expression.Constant(creatorId, typeof(Guid?)));
+			var lambda = Expression.Lambda<Func<TEntity, bool>>(equality, parameter);
+
+			return await _dbSet.Where(lambda).ToListAsync();
+		}
+
 		public async Task<IEnumerable<TEntity>> FindAsync(Expression<Func<TEntity, bool>> predicate)
 		{
 			return await _dbSet.Where(predicate).ToListAsync();

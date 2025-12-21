@@ -20,11 +20,11 @@ namespace ExplanatoryNoteAPI.Utilities.Jwt
 			_jwtOptions = options.Value;
 		}
 
-		public string GenerateToken(string email)
+		public string GenerateToken(string id)
 		{
 			var claims = new List<Claim>
 			{
-				new(ClaimTypes.Email, email),
+				new("Id", id),
 			};
 
 			var signingCredentials = new SigningCredentials(

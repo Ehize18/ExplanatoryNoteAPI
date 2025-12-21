@@ -1,14 +1,27 @@
-# См. статью по ссылке https://aka.ms/customizecontainer, чтобы узнать как настроить контейнер отладки и как Visual Studio использует этот Dockerfile для создания образов для ускорения отладки.
+# Этап отладки быстрый режим
+FROM ubuntu:noble AS base
 
-# Этот этап используется при запуске из VS в быстром режиме (по умолчанию для конфигурации отладки)
-FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS base
-USER $APP_UID
+# Установка .NET Runtime
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    aspnetcore-runtime-10.0 \
+    ca-certificates \
+    libgdiplus \
+    wkhtmltopdf \
+    libc6-dev \
+    libjpeg62 \
+    xfonts-75dpi \
+    fontconfig
+RUN if [ -f /usr/local/lib/libwkhtmltox.so.1 ]; then \
+    ln -sf /usr/local/lib/libwkhtmltox.so.1 /usr/lib/libwkhtmltox.so; fi
+ARG APP_UID=1654
+RUN groupadd --gid $APP_UID appuser && useradd --uid $APP_UID --gid $APP_UID appuser
+
+USER appuser
 WORKDIR /app
 EXPOSE 8080
 EXPOSE 8081
 
-
-# Этот этап используется для сборки проекта службы
+# Этап сборки
 FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
@@ -22,26 +35,14 @@ COPY . .
 WORKDIR "/src/ExplanatoryNoteAPI"
 RUN dotnet build "./ExplanatoryNoteAPI.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
-# Этот этап используется для публикации проекта службы, который будет скопирован на последний этап
+# Этап публикации
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
 RUN dotnet publish "./ExplanatoryNoteAPI.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
 
-
-
-# Этот этап используется в рабочей среде или при запуске из VS в обычном режиме (по умолчанию, когда конфигурация отладки не используется)
+# Финальный этап - рабочая среда
 FROM base AS final
 WORKDIR /app
-RUN apt-get update
-RUN apt-get install -y libgdiplus wkhtmltopdf
-RUN apt-get install -y libc6-dev libjpeg62 xfonts-75dpi
-RUN ln -s /usr/lib/libgdiplus.so /lib/x86_64-linux-gnu/libgdiplus.so
-
-# Проверка расположения библиотек wkhtmltopdf и создание ссылок
-RUN ldconfig
-RUN if [ -f /usr/local/lib/libwkhtmltox.so ]; then ln -s /usr/local/lib/libwkhtmltox.so /usr/lib/libwkhtmltox.so; fi
-
-RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 COPY ["ExplanatoryNoteAPI/explanatorynote-01-05.xsl", "/"]
 COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "ExplanatoryNoteAPI.dll"]

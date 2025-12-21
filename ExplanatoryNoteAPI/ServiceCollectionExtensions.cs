@@ -5,12 +5,15 @@ using ExplanatoryNoteAPI.Application.Options;
 using ExplanatoryNoteAPI.Application.Services;
 using ExplanatoryNoteAPI.Core;
 using ExplanatoryNoteAPI.Core.Entities;
+using ExplanatoryNoteAPI.Core.Interfaces;
 using ExplanatoryNoteAPI.Database;
 using ExplanatoryNoteAPI.Database.Repositories;
+using ExplanatoryNoteAPI.Utilities.Cache;
 using ExplanatoryNoteAPI.Utilities.Jwt;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using StackExchange.Redis;
 
 namespace ExplanatoryNoteAPI
 {
@@ -112,6 +115,41 @@ namespace ExplanatoryNoteAPI
 			});
 
 			services.AddScoped<IFileService, FileService>();
+
+			return services;
+		}
+
+		public static IServiceCollection AddRedisCaching(this IServiceCollection services, IConfiguration config)
+		{
+			var endpoints = config.GetSection("Cache:EndPoints").Get<List<string>>();
+			var endpointCollection = new EndPointCollection();
+			foreach (var endpoint in endpoints)
+			{
+				endpointCollection.Add(endpoint);
+			}
+			services.AddStackExchangeRedisCache(options =>
+			{
+				options.ConfigurationOptions = new ConfigurationOptions
+				{
+					EndPoints = endpointCollection,
+					ConnectRetry = config.GetValue<int>("Cache:ConnectRetry"),
+					ReconnectRetryPolicy = new LinearRetry(250),
+					AbortOnConnectFail = false,
+					ConnectTimeout = config.GetValue<int>("Cache:Timeout"),
+					SyncTimeout = config.GetValue<int>("Cache:Timeout")
+				};
+				options.InstanceName = config.GetValue<string>("Cache:InstanceName");
+			});
+
+			services.AddScoped<ICache, RedisCache>();
+
+			return services;
+		}
+
+		public static IServiceCollection AddEmailService(this IServiceCollection services, IConfiguration config)
+		{
+			services.Configure<SmtpOptions>(config.GetSection(nameof(SmtpOptions)));
+			services.AddScoped<IEmailService, EmailService>();
 
 			return services;
 		}

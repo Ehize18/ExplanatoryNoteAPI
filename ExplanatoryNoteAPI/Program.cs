@@ -23,6 +23,8 @@ namespace ExplanatoryNoteAPI
             builder.Services.AddApplicationServices();
             builder.Services.AddFileServices(config);
             builder.Services.AddPostgreSQLDb(config);
+            builder.Services.AddEmailService(config);
+            builder.Services.AddRedisCaching(config);
 
             builder.Services.AddControllers().AddNewtonsoftJson();
             // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
@@ -51,7 +53,7 @@ namespace ExplanatoryNoteAPI
 			using var scope = app.Services.CreateScope();
 
 			var context = scope.ServiceProvider.GetRequiredService<ExplanatoryNoteDbContext>();
-			//context.Database.Migrate();
+			context.Database.Migrate();
 
 			app.Run();
         }

@@ -11,11 +11,11 @@ namespace ExplanatoryNoteAPI.Database.Repositories
 		{
 		}
 
-		public async Task<ExplanatoryNote?> GetFullNote(Guid id)
+		public async Task<ExplanatoryNote?> GetFullNote(Guid id, Guid creatorId)
 		{
 			var note = await this.GetByIdAsync(id);
 
-			if (note == null)
+			if (note == null || note.CreatedById != creatorId)
 			{
 				return null;
 			}

@@ -3,6 +3,7 @@ using System;
 using ExplanatoryNoteAPI.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace ExplanatoryNoteAPI.Database.Migrations
 {
     [DbContext(typeof(ExplanatoryNoteDbContext))]
-    partial class ExplanatoryNoteDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251220101549_UserApprove")]
+    partial class UserApprove
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -4261,9 +4264,6 @@ namespace ExplanatoryNoteAPI.Database.Migrations
                         .HasColumnType("timestamp with time zone");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("Email")
-                        .IsUnique();
 
                     b.ToTable("SysUser");
                 });

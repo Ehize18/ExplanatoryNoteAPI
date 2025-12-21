@@ -3,6 +3,7 @@ using System;
 using ExplanatoryNoteAPI.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace ExplanatoryNoteAPI.Database.Migrations
 {
     [DbContext(typeof(ExplanatoryNoteDbContext))]
-    partial class ExplanatoryNoteDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251220105026_UserEmailUnique")]
+    partial class UserEmailUnique
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
